@@ -20,7 +20,50 @@ spec:
     - host: api.npool.top
       http: &http_rules
         paths:
-          - path: /api/oracle-manager
+          - path: /api/oracle-manager/version
+            backend:
+              serviceName: oracle-manager
+              servicePort: 50290
+          - path: /api/oracle-manager/v1/get/rewards
+            backend:
+              serviceName: oracle-manager
+              servicePort: 50290
+    - host: api.procyon.vip
+      http: *http_rules
+    - host: api.xpool.top
+      http: *http_rules
+    - host: api.ohhash.com
+      http: *http_rules
+
+---
+
+apiVersion: networking.k8s.io/v1beta1
+kind: Ingress
+metadata:
+  name: oracle-manager-traefik-app-ingress
+  namespace: kube-system
+  annotations:
+    k8s.kuboard.cn/displayName: oracle-manager-traefik-app
+    k8s.kuboard.cn/workload: oracle-manager-traefik-app
+    kubernetes.io/ingress.class: "traefik-internet"
+    traefik.ingress.kubernetes.io/router.entrypoints: web,websecure
+    traefik.ingress.kubernetes.io/router.middlewares: kube-system-strip-oracle-manager-prefix@kubernetescrd,
+                                                      kube-system-common-headers@kubernetescrd,
+                                                      kube-system-headers-appid-to-body@kubernetescrd,
+                                                      kube-system-headers-userid-to-body@kubernetescrd,
+                                                      kube-system-headers-app-login-token-to-body@kubernetescrd,
+                                                      kube-system-app-user-role-rbac-auth@kubernetescrd
+
+spec:
+  rules:
+    - host: api.npool.top
+      http: &http_rules
+        paths:
+          - path: /api/oracle-manager/v1/create/reward
+            backend:
+              serviceName: oracle-manager
+              servicePort: 50290
+          - path: /api/oracle-manager/v1/v1/update/reward
             backend:
               serviceName: oracle-manager
               servicePort: 50290
