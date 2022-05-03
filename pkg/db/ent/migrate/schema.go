@@ -8,19 +8,24 @@ import (
 )
 
 var (
-	// EmptiesColumns holds the columns for the "empties" table.
-	EmptiesColumns = []*schema.Column{
-		{Name: "id", Type: field.TypeInt, Increment: true},
+	// RewardsColumns holds the columns for the "rewards" table.
+	RewardsColumns = []*schema.Column{
+		{Name: "id", Type: field.TypeUUID, Unique: true},
+		{Name: "created_at", Type: field.TypeUint32},
+		{Name: "updated_at", Type: field.TypeUint32},
+		{Name: "deleted_at", Type: field.TypeUint32},
+		{Name: "coin_type_id", Type: field.TypeUUID, Unique: true},
+		{Name: "daily_reward", Type: field.TypeUint64},
 	}
-	// EmptiesTable holds the schema information for the "empties" table.
-	EmptiesTable = &schema.Table{
-		Name:       "empties",
-		Columns:    EmptiesColumns,
-		PrimaryKey: []*schema.Column{EmptiesColumns[0]},
+	// RewardsTable holds the schema information for the "rewards" table.
+	RewardsTable = &schema.Table{
+		Name:       "rewards",
+		Columns:    RewardsColumns,
+		PrimaryKey: []*schema.Column{RewardsColumns[0]},
 	}
 	// Tables holds all the tables in the schema.
 	Tables = []*schema.Table{
-		EmptiesTable,
+		RewardsTable,
 	}
 )
 

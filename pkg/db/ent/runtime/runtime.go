@@ -2,9 +2,56 @@
 
 package runtime
 
-// The schema-stitching logic is generated in github.com/NpoolPlatform/go-service-app-template/pkg/db/ent/runtime.go
+import (
+	"context"
+
+	"github.com/NpoolPlatform/oracle-manager/pkg/db/ent/reward"
+	"github.com/NpoolPlatform/oracle-manager/pkg/db/ent/schema"
+	"github.com/google/uuid"
+
+	"entgo.io/ent"
+	"entgo.io/ent/privacy"
+)
+
+// The init function reads all schema descriptors with runtime code
+// (default values, validators, hooks and policies) and stitches it
+// to their package variables.
+func init() {
+	rewardMixin := schema.Reward{}.Mixin()
+	reward.Policy = privacy.NewPolicies(rewardMixin[0], schema.Reward{})
+	reward.Hooks[0] = func(next ent.Mutator) ent.Mutator {
+		return ent.MutateFunc(func(ctx context.Context, m ent.Mutation) (ent.Value, error) {
+			if err := reward.Policy.EvalMutation(ctx, m); err != nil {
+				return nil, err
+			}
+			return next.Mutate(ctx, m)
+		})
+	}
+	rewardMixinFields0 := rewardMixin[0].Fields()
+	_ = rewardMixinFields0
+	rewardFields := schema.Reward{}.Fields()
+	_ = rewardFields
+	// rewardDescCreatedAt is the schema descriptor for created_at field.
+	rewardDescCreatedAt := rewardMixinFields0[0].Descriptor()
+	// reward.DefaultCreatedAt holds the default value on creation for the created_at field.
+	reward.DefaultCreatedAt = rewardDescCreatedAt.Default.(func() uint32)
+	// rewardDescUpdatedAt is the schema descriptor for updated_at field.
+	rewardDescUpdatedAt := rewardMixinFields0[1].Descriptor()
+	// reward.DefaultUpdatedAt holds the default value on creation for the updated_at field.
+	reward.DefaultUpdatedAt = rewardDescUpdatedAt.Default.(func() uint32)
+	// reward.UpdateDefaultUpdatedAt holds the default value on update for the updated_at field.
+	reward.UpdateDefaultUpdatedAt = rewardDescUpdatedAt.UpdateDefault.(func() uint32)
+	// rewardDescDeletedAt is the schema descriptor for deleted_at field.
+	rewardDescDeletedAt := rewardMixinFields0[2].Descriptor()
+	// reward.DefaultDeletedAt holds the default value on creation for the deleted_at field.
+	reward.DefaultDeletedAt = rewardDescDeletedAt.Default.(func() uint32)
+	// rewardDescID is the schema descriptor for id field.
+	rewardDescID := rewardFields[0].Descriptor()
+	// reward.DefaultID holds the default value on creation for the id field.
+	reward.DefaultID = rewardDescID.Default.(func() uuid.UUID)
+}
 
 const (
-	Version = "v0.10.0"                                         // Version of ent codegen.
-	Sum     = "h1:9cBomE1fh+WX34DPYQL7tDNAIvhKa3tXvwxuLyhYCMo=" // Sum of ent codegen.
+	Version = "v0.10.1"                                         // Version of ent codegen.
+	Sum     = "h1:dM5h4Zk6yHGIgw4dCqVzGw3nWgpGYJiV4/kyHEF6PFo=" // Sum of ent codegen.
 )
