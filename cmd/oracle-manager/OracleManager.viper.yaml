@@ -1,9 +1,9 @@
 ---
 config:
   hostname: "oracle-manager.npool.top"
-  http_port: 32759
-  grpc_port: 32789
-  healthz_port: 32799
+  http_port: 50290
+  grpc_port: 50291
+  healthz_port: 50292
   appid: "89089012783789789719823798127398"
   serviceid: "629acfae-cad0-11ec-90cb-361644556ed1"
   logdir: "./"
