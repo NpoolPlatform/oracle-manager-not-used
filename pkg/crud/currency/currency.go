@@ -40,6 +40,8 @@ func (s *Currency) rowToObject(row *ent.Currency) *npool.Currency {
 		CoinTypeID:     row.CoinTypeID.String(),
 		PriceVSUSDT:    price.DBPriceToVisualPrice(row.PriceVsUsdt),
 		AppPriceVSUSDT: price.DBPriceToVisualPrice(row.AppPriceVsUsdt),
+		OverPercent:    row.OverPercent,
+		CurrencyMethod: row.CurrencyMethod,
 	}
 }
 
@@ -53,6 +55,8 @@ func (s *Currency) Create(ctx context.Context, in *npool.Currency) (*npool.Curre
 			SetCoinTypeID(uuid.MustParse(in.GetCoinTypeID())).
 			SetPriceVsUsdt(price.VisualPriceToDBPrice(in.GetPriceVSUSDT())).
 			SetAppPriceVsUsdt(price.VisualPriceToDBPrice(in.GetAppPriceVSUSDT())).
+			SetOverPercent(in.GetOverPercent()).
+			SetCurrencyMethod(in.GetCurrencyMethod()).
 			Save(_ctx)
 		return err
 	})
@@ -71,6 +75,8 @@ func (s *Currency) Update(ctx context.Context, in *npool.Currency) (*npool.Curre
 		info, err = s.Tx.Currency.UpdateOneID(uuid.MustParse(in.GetID())).
 			SetPriceVsUsdt(price.VisualPriceToDBPrice(in.GetPriceVSUSDT())).
 			SetAppPriceVsUsdt(price.VisualPriceToDBPrice(in.GetAppPriceVSUSDT())).
+			SetOverPercent(in.GetOverPercent()).
+			SetCurrencyMethod(in.GetCurrencyMethod()).
 			Save(_ctx)
 		return err
 	})
@@ -118,6 +124,12 @@ func (s *Currency) queryFromConds(conds cruder.Conds) (*ent.CurrencyQuery, error
 				return nil, fmt.Errorf("invalid coin type id: %v", err)
 			}
 			stm = stm.Where(currency.CoinTypeID(id))
+		case constant.CurrencyFieldCurrencyMethod:
+			method, err := cruder.AnyTypeString(v.Val)
+			if err != nil {
+				return nil, fmt.Errorf("invalid currency method: %v", err)
+			}
+			stm = stm.Where(currency.CurrencyMethod(method))
 		default:
 			return nil, fmt.Errorf("invalid currency field")
 		}
