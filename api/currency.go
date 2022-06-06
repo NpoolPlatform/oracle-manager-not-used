@@ -9,7 +9,6 @@ import (
 	"github.com/NpoolPlatform/go-service-framework/pkg/logger"
 	constant "github.com/NpoolPlatform/oracle-manager/pkg/const"
 	crud "github.com/NpoolPlatform/oracle-manager/pkg/crud/currency"
-	currencymw "github.com/NpoolPlatform/oracle-manager/pkg/middleware/currency"
 
 	cruder "github.com/NpoolPlatform/libent-cruder/pkg/cruder"
 	npool "github.com/NpoolPlatform/message/npool/oraclemgr"
@@ -291,10 +290,6 @@ func (s *Server) DeleteCurrency(ctx context.Context, in *npool.DeleteCurrencyReq
 	}, nil
 }
 
-func (s *Server) Currencies(ctx context.Context, in *npool.CurrenciesRequest) (*npool.CurrenciesResponse, error) {
-	return &npool.CurrenciesResponse{}, status.Error(codes.Internal, "NOT IMPLEMENTED")
-}
-
 func (s *Server) Currency(ctx context.Context, in *npool.CurrencyRequest) (*npool.CurrencyResponse, error) {
 	conds := cruder.NewConds().
 		WithCond(constant.FieldAppID, cruder.EQ, in.GetAppID()).
@@ -313,26 +308,11 @@ func (s *Server) Currency(ctx context.Context, in *npool.CurrencyRequest) (*npoo
 	}
 
 	info, err := schema.RowOnly(ctx, conds)
-	if err != nil {
+	if err != nil || info == nil {
 		logger.Sugar().Errorf("fail get coin currency: %v", err)
 		return &npool.CurrencyResponse{}, status.Errorf(codes.Internal, err.Error())
 	}
 
-	if info != nil {
-		resp.Info.Amount = info.AppPriceVSUSDT
-		return resp, nil
-	}
-
-	infos, err := currencymw.Currencies(ctx, []string{in.GetCoinTypeID()})
-	if err != nil {
-		logger.Sugar().Errorf("fail get coin currency: %v", err)
-		return &npool.CurrencyResponse{}, status.Errorf(codes.Internal, err.Error())
-	}
-	if len(infos) == 0 {
-		logger.Sugar().Errorf("empty coin currency")
-		return &npool.CurrencyResponse{}, status.Errorf(codes.Internal, "empty coin currency")
-	}
-
-	resp.Info.Amount = infos[0].Amount
+	resp.Info.Amount = info.AppPriceVSUSDT
 	return resp, nil
 }

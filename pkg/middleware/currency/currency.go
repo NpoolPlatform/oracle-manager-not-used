@@ -7,8 +7,6 @@ import (
 	"github.com/NpoolPlatform/staker-manager/pkg/middleware/currency/coinbase"
 	"github.com/NpoolPlatform/staker-manager/pkg/middleware/currency/coingecko"
 	"github.com/NpoolPlatform/staker-manager/pkg/middleware/currency/common"
-
-	npool "github.com/NpoolPlatform/message/npool/oraclemgr"
 )
 
 func USDPrice(ctx context.Context, coinName string) (float64, error) {
@@ -26,8 +24,4 @@ func USDPrice(ctx context.Context, coinName string) (float64, error) {
 		return myPrice, nil
 	}
 	return 0, fmt.Errorf("fail get %v currency: %v", coinName, err)
-}
-
-func Currencies(ctx context.Context, coinTypeIDs []string) ([]*npool.CurrencyAmount, error) {
-	return nil, nil
 }
