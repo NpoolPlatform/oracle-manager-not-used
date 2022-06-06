@@ -14,7 +14,8 @@ var (
 		{Name: "created_at", Type: field.TypeUint32},
 		{Name: "updated_at", Type: field.TypeUint32},
 		{Name: "deleted_at", Type: field.TypeUint32},
-		{Name: "coin_type_id", Type: field.TypeUUID, Unique: true},
+		{Name: "app_id", Type: field.TypeUUID},
+		{Name: "coin_type_id", Type: field.TypeUUID},
 		{Name: "price_vs_usdt", Type: field.TypeUint64},
 	}
 	// CurrenciesTable holds the schema information for the "currencies" table.
@@ -22,6 +23,13 @@ var (
 		Name:       "currencies",
 		Columns:    CurrenciesColumns,
 		PrimaryKey: []*schema.Column{CurrenciesColumns[0]},
+		Indexes: []*schema.Index{
+			{
+				Name:    "currency_app_id_coin_type_id",
+				Unique:  true,
+				Columns: []*schema.Column{CurrenciesColumns[4], CurrenciesColumns[5]},
+			},
+		},
 	}
 	// RewardsColumns holds the columns for the "rewards" table.
 	RewardsColumns = []*schema.Column{

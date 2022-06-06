@@ -65,6 +65,12 @@ func (cc *CurrencyCreate) SetNillableDeletedAt(u *uint32) *CurrencyCreate {
 	return cc
 }
 
+// SetAppID sets the "app_id" field.
+func (cc *CurrencyCreate) SetAppID(u uuid.UUID) *CurrencyCreate {
+	cc.mutation.SetAppID(u)
+	return cc
+}
+
 // SetCoinTypeID sets the "coin_type_id" field.
 func (cc *CurrencyCreate) SetCoinTypeID(u uuid.UUID) *CurrencyCreate {
 	cc.mutation.SetCoinTypeID(u)
@@ -206,6 +212,9 @@ func (cc *CurrencyCreate) check() error {
 	if _, ok := cc.mutation.DeletedAt(); !ok {
 		return &ValidationError{Name: "deleted_at", err: errors.New(`ent: missing required field "Currency.deleted_at"`)}
 	}
+	if _, ok := cc.mutation.AppID(); !ok {
+		return &ValidationError{Name: "app_id", err: errors.New(`ent: missing required field "Currency.app_id"`)}
+	}
 	if _, ok := cc.mutation.CoinTypeID(); !ok {
 		return &ValidationError{Name: "coin_type_id", err: errors.New(`ent: missing required field "Currency.coin_type_id"`)}
 	}
@@ -272,6 +281,14 @@ func (cc *CurrencyCreate) createSpec() (*Currency, *sqlgraph.CreateSpec) {
 			Column: currency.FieldDeletedAt,
 		})
 		_node.DeletedAt = value
+	}
+	if value, ok := cc.mutation.AppID(); ok {
+		_spec.Fields = append(_spec.Fields, &sqlgraph.FieldSpec{
+			Type:   field.TypeUUID,
+			Value:  value,
+			Column: currency.FieldAppID,
+		})
+		_node.AppID = value
 	}
 	if value, ok := cc.mutation.CoinTypeID(); ok {
 		_spec.Fields = append(_spec.Fields, &sqlgraph.FieldSpec{
@@ -394,6 +411,18 @@ func (u *CurrencyUpsert) UpdateDeletedAt() *CurrencyUpsert {
 // AddDeletedAt adds v to the "deleted_at" field.
 func (u *CurrencyUpsert) AddDeletedAt(v uint32) *CurrencyUpsert {
 	u.Add(currency.FieldDeletedAt, v)
+	return u
+}
+
+// SetAppID sets the "app_id" field.
+func (u *CurrencyUpsert) SetAppID(v uuid.UUID) *CurrencyUpsert {
+	u.Set(currency.FieldAppID, v)
+	return u
+}
+
+// UpdateAppID sets the "app_id" field to the value that was provided on create.
+func (u *CurrencyUpsert) UpdateAppID() *CurrencyUpsert {
+	u.SetExcluded(currency.FieldAppID)
 	return u
 }
 
@@ -537,6 +566,20 @@ func (u *CurrencyUpsertOne) AddDeletedAt(v uint32) *CurrencyUpsertOne {
 func (u *CurrencyUpsertOne) UpdateDeletedAt() *CurrencyUpsertOne {
 	return u.Update(func(s *CurrencyUpsert) {
 		s.UpdateDeletedAt()
+	})
+}
+
+// SetAppID sets the "app_id" field.
+func (u *CurrencyUpsertOne) SetAppID(v uuid.UUID) *CurrencyUpsertOne {
+	return u.Update(func(s *CurrencyUpsert) {
+		s.SetAppID(v)
+	})
+}
+
+// UpdateAppID sets the "app_id" field to the value that was provided on create.
+func (u *CurrencyUpsertOne) UpdateAppID() *CurrencyUpsertOne {
+	return u.Update(func(s *CurrencyUpsert) {
+		s.UpdateAppID()
 	})
 }
 
@@ -851,6 +894,20 @@ func (u *CurrencyUpsertBulk) AddDeletedAt(v uint32) *CurrencyUpsertBulk {
 func (u *CurrencyUpsertBulk) UpdateDeletedAt() *CurrencyUpsertBulk {
 	return u.Update(func(s *CurrencyUpsert) {
 		s.UpdateDeletedAt()
+	})
+}
+
+// SetAppID sets the "app_id" field.
+func (u *CurrencyUpsertBulk) SetAppID(v uuid.UUID) *CurrencyUpsertBulk {
+	return u.Update(func(s *CurrencyUpsert) {
+		s.SetAppID(v)
+	})
+}
+
+// UpdateAppID sets the "app_id" field to the value that was provided on create.
+func (u *CurrencyUpsertBulk) UpdateAppID() *CurrencyUpsertBulk {
+	return u.Update(func(s *CurrencyUpsert) {
+		s.UpdateAppID()
 	})
 }
 

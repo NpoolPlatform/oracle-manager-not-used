@@ -41,6 +41,7 @@ type CurrencyMutation struct {
 	addupdated_at    *int32
 	deleted_at       *uint32
 	adddeleted_at    *int32
+	app_id           *uuid.UUID
 	coin_type_id     *uuid.UUID
 	price_vs_usdt    *uint64
 	addprice_vs_usdt *int64
@@ -322,6 +323,42 @@ func (m *CurrencyMutation) ResetDeletedAt() {
 	m.adddeleted_at = nil
 }
 
+// SetAppID sets the "app_id" field.
+func (m *CurrencyMutation) SetAppID(u uuid.UUID) {
+	m.app_id = &u
+}
+
+// AppID returns the value of the "app_id" field in the mutation.
+func (m *CurrencyMutation) AppID() (r uuid.UUID, exists bool) {
+	v := m.app_id
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldAppID returns the old "app_id" field's value of the Currency entity.
+// If the Currency object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *CurrencyMutation) OldAppID(ctx context.Context) (v uuid.UUID, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldAppID is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldAppID requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldAppID: %w", err)
+	}
+	return oldValue.AppID, nil
+}
+
+// ResetAppID resets all changes to the "app_id" field.
+func (m *CurrencyMutation) ResetAppID() {
+	m.app_id = nil
+}
+
 // SetCoinTypeID sets the "coin_type_id" field.
 func (m *CurrencyMutation) SetCoinTypeID(u uuid.UUID) {
 	m.coin_type_id = &u
@@ -433,7 +470,7 @@ func (m *CurrencyMutation) Type() string {
 // order to get all numeric fields that were incremented/decremented, call
 // AddedFields().
 func (m *CurrencyMutation) Fields() []string {
-	fields := make([]string, 0, 5)
+	fields := make([]string, 0, 6)
 	if m.created_at != nil {
 		fields = append(fields, currency.FieldCreatedAt)
 	}
@@ -442,6 +479,9 @@ func (m *CurrencyMutation) Fields() []string {
 	}
 	if m.deleted_at != nil {
 		fields = append(fields, currency.FieldDeletedAt)
+	}
+	if m.app_id != nil {
+		fields = append(fields, currency.FieldAppID)
 	}
 	if m.coin_type_id != nil {
 		fields = append(fields, currency.FieldCoinTypeID)
@@ -463,6 +503,8 @@ func (m *CurrencyMutation) Field(name string) (ent.Value, bool) {
 		return m.UpdatedAt()
 	case currency.FieldDeletedAt:
 		return m.DeletedAt()
+	case currency.FieldAppID:
+		return m.AppID()
 	case currency.FieldCoinTypeID:
 		return m.CoinTypeID()
 	case currency.FieldPriceVsUsdt:
@@ -482,6 +524,8 @@ func (m *CurrencyMutation) OldField(ctx context.Context, name string) (ent.Value
 		return m.OldUpdatedAt(ctx)
 	case currency.FieldDeletedAt:
 		return m.OldDeletedAt(ctx)
+	case currency.FieldAppID:
+		return m.OldAppID(ctx)
 	case currency.FieldCoinTypeID:
 		return m.OldCoinTypeID(ctx)
 	case currency.FieldPriceVsUsdt:
@@ -515,6 +559,13 @@ func (m *CurrencyMutation) SetField(name string, value ent.Value) error {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
 		m.SetDeletedAt(v)
+		return nil
+	case currency.FieldAppID:
+		v, ok := value.(uuid.UUID)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetAppID(v)
 		return nil
 	case currency.FieldCoinTypeID:
 		v, ok := value.(uuid.UUID)
@@ -638,6 +689,9 @@ func (m *CurrencyMutation) ResetField(name string) error {
 		return nil
 	case currency.FieldDeletedAt:
 		m.ResetDeletedAt()
+		return nil
+	case currency.FieldAppID:
+		m.ResetAppID()
 		return nil
 	case currency.FieldCoinTypeID:
 		m.ResetCoinTypeID()
