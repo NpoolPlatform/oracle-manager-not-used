@@ -63,7 +63,7 @@ spec:
             backend:
               serviceName: oracle-manager
               servicePort: 50290
-          - path: /api/oracle-manager/v1/v1/update/reward
+          - path: /api/oracle-manager/v1/update/reward
             backend:
               serviceName: oracle-manager
               servicePort: 50290
