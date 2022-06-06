@@ -28,6 +28,10 @@ spec:
             backend:
               serviceName: oracle-manager
               servicePort: 50290
+          - path: /api/oracle-manager/v1/get/currencies
+            backend:
+              serviceName: oracle-manager
+              servicePort: 50290
     - host: api.procyon.vip
       http: *http_rules
     - host: api.xpool.top
@@ -64,6 +68,18 @@ spec:
               serviceName: oracle-manager
               servicePort: 50290
           - path: /api/oracle-manager/v1/update/reward
+            backend:
+              serviceName: oracle-manager
+              servicePort: 50290
+          - path: /api/oracle-manager/v1/create/currency
+            backend:
+              serviceName: oracle-manager
+              servicePort: 50290
+          - path: /api/oracle-manager/v1/update/currency
+            backend:
+              serviceName: oracle-manager
+              servicePort: 50290
+          - path: /api/oracle-manager/v1/get/app
             backend:
               serviceName: oracle-manager
               servicePort: 50290
