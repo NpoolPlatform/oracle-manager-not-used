@@ -200,6 +200,8 @@ func (s *Server) GetCurrencies(ctx context.Context, in *npool.GetCurrenciesReque
 		return &npool.GetCurrenciesResponse{}, status.Error(codes.Internal, err.Error())
 	}
 
+	conds = conds.WithCond(constant.FieldAppID, cruder.EQ, in.GetAppID)
+
 	schema, err := crud.New(ctx, nil)
 	if err != nil {
 		logger.Sugar().Errorf("fail create schema entity: %v", err)
@@ -213,6 +215,33 @@ func (s *Server) GetCurrencies(ctx context.Context, in *npool.GetCurrenciesReque
 	}
 
 	return &npool.GetCurrenciesResponse{
+		Infos: infos,
+		Total: int32(total),
+	}, nil
+}
+
+func (s *Server) GetAppCurrencies(ctx context.Context, in *npool.GetAppCurrenciesRequest) (*npool.GetAppCurrenciesResponse, error) {
+	conds, err := currencyCondsToConds(in.GetConds())
+	if err != nil {
+		logger.Sugar().Errorf("invalid currency fields: %v", err)
+		return &npool.GetAppCurrenciesResponse{}, status.Error(codes.Internal, err.Error())
+	}
+
+	conds = conds.WithCond(constant.FieldAppID, cruder.EQ, in.GetTargetAppID)
+
+	schema, err := crud.New(ctx, nil)
+	if err != nil {
+		logger.Sugar().Errorf("fail create schema entity: %v", err)
+		return &npool.GetAppCurrenciesResponse{}, status.Error(codes.Internal, err.Error())
+	}
+
+	infos, total, err := schema.Rows(ctx, conds, int(in.GetOffset()), int(in.GetLimit()))
+	if err != nil {
+		logger.Sugar().Errorf("fail get currencies: %v", err)
+		return &npool.GetAppCurrenciesResponse{}, status.Error(codes.Internal, err.Error())
+	}
+
+	return &npool.GetAppCurrenciesResponse{
 		Infos: infos,
 		Total: int32(total),
 	}, nil
