@@ -6,5 +6,8 @@ import (
 	"entgo.io/ent/dialect/sql"
 )
 
+// Currency is the predicate function for currency builders.
+type Currency func(*sql.Selector)
+
 // Reward is the predicate function for reward builders.
 type Reward func(*sql.Selector)

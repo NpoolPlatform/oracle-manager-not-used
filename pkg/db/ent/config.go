@@ -24,7 +24,8 @@ type config struct {
 
 // hooks per client, for fast access.
 type hooks struct {
-	Reward []ent.Hook
+	Currency []ent.Hook
+	Reward   []ent.Hook
 }
 
 // Options applies the options on the config object.

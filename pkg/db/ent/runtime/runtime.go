@@ -5,6 +5,7 @@ package runtime
 import (
 	"context"
 
+	"github.com/NpoolPlatform/oracle-manager/pkg/db/ent/currency"
 	"github.com/NpoolPlatform/oracle-manager/pkg/db/ent/reward"
 	"github.com/NpoolPlatform/oracle-manager/pkg/db/ent/schema"
 	"github.com/google/uuid"
@@ -17,6 +18,38 @@ import (
 // (default values, validators, hooks and policies) and stitches it
 // to their package variables.
 func init() {
+	currencyMixin := schema.Currency{}.Mixin()
+	currency.Policy = privacy.NewPolicies(currencyMixin[0], schema.Currency{})
+	currency.Hooks[0] = func(next ent.Mutator) ent.Mutator {
+		return ent.MutateFunc(func(ctx context.Context, m ent.Mutation) (ent.Value, error) {
+			if err := currency.Policy.EvalMutation(ctx, m); err != nil {
+				return nil, err
+			}
+			return next.Mutate(ctx, m)
+		})
+	}
+	currencyMixinFields0 := currencyMixin[0].Fields()
+	_ = currencyMixinFields0
+	currencyFields := schema.Currency{}.Fields()
+	_ = currencyFields
+	// currencyDescCreatedAt is the schema descriptor for created_at field.
+	currencyDescCreatedAt := currencyMixinFields0[0].Descriptor()
+	// currency.DefaultCreatedAt holds the default value on creation for the created_at field.
+	currency.DefaultCreatedAt = currencyDescCreatedAt.Default.(func() uint32)
+	// currencyDescUpdatedAt is the schema descriptor for updated_at field.
+	currencyDescUpdatedAt := currencyMixinFields0[1].Descriptor()
+	// currency.DefaultUpdatedAt holds the default value on creation for the updated_at field.
+	currency.DefaultUpdatedAt = currencyDescUpdatedAt.Default.(func() uint32)
+	// currency.UpdateDefaultUpdatedAt holds the default value on update for the updated_at field.
+	currency.UpdateDefaultUpdatedAt = currencyDescUpdatedAt.UpdateDefault.(func() uint32)
+	// currencyDescDeletedAt is the schema descriptor for deleted_at field.
+	currencyDescDeletedAt := currencyMixinFields0[2].Descriptor()
+	// currency.DefaultDeletedAt holds the default value on creation for the deleted_at field.
+	currency.DefaultDeletedAt = currencyDescDeletedAt.Default.(func() uint32)
+	// currencyDescID is the schema descriptor for id field.
+	currencyDescID := currencyFields[0].Descriptor()
+	// currency.DefaultID holds the default value on creation for the id field.
+	currency.DefaultID = currencyDescID.Default.(func() uuid.UUID)
 	rewardMixin := schema.Reward{}.Mixin()
 	reward.Policy = privacy.NewPolicies(rewardMixin[0], schema.Reward{})
 	reward.Hooks[0] = func(next ent.Mutator) ent.Mutator {
