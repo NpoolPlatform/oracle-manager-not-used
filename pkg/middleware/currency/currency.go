@@ -4,9 +4,9 @@ import (
 	"context"
 	"fmt"
 
-	"github.com/NpoolPlatform/staker-manager/pkg/middleware/currency/coinbase"
-	"github.com/NpoolPlatform/staker-manager/pkg/middleware/currency/coingecko"
-	"github.com/NpoolPlatform/staker-manager/pkg/middleware/currency/common"
+	"github.com/NpoolPlatform/oracle-manager/pkg/middleware/currency/coinbase"
+	"github.com/NpoolPlatform/oracle-manager/pkg/middleware/currency/coingecko"
+	"github.com/NpoolPlatform/oracle-manager/pkg/middleware/currency/common"
 )
 
 func USDPrice(ctx context.Context, coinName string) (float64, error) {

@@ -8,7 +8,7 @@ import (
 	"strings"
 	"time"
 
-	"github.com/NpoolPlatform/staker-manager/pkg/middleware/currency/common"
+	"github.com/NpoolPlatform/oracle-manager/pkg/middleware/currency/common"
 	"github.com/go-resty/resty/v2"
 
 	"golang.org/x/xerrors"
