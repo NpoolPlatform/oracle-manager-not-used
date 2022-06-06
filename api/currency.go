@@ -200,7 +200,7 @@ func (s *Server) GetCurrencies(ctx context.Context, in *npool.GetCurrenciesReque
 		return &npool.GetCurrenciesResponse{}, status.Error(codes.Internal, err.Error())
 	}
 
-	conds = conds.WithCond(constant.FieldAppID, cruder.EQ, in.GetAppID)
+	conds = conds.WithCond(constant.FieldAppID, cruder.EQ, in.GetAppID())
 
 	schema, err := crud.New(ctx, nil)
 	if err != nil {
@@ -227,7 +227,7 @@ func (s *Server) GetAppCurrencies(ctx context.Context, in *npool.GetAppCurrencie
 		return &npool.GetAppCurrenciesResponse{}, status.Error(codes.Internal, err.Error())
 	}
 
-	conds = conds.WithCond(constant.FieldAppID, cruder.EQ, in.GetTargetAppID)
+	conds = conds.WithCond(constant.FieldAppID, cruder.EQ, in.GetTargetAppID())
 
 	schema, err := crud.New(ctx, nil)
 	if err != nil {
