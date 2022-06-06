@@ -11,4 +11,9 @@ const (
 
 	CurrencyFieldPriceVSUSDT    = "PriceVSUSDT"
 	CurrencyFieldAppPriceVSUSDT = "AppPriceVSUSDT"
+	CurrencyFieldOverPercent    = "OverPercent"
+	CurrencyFieldCurrencyMethod = "CurrencyMethod"
+
+	CurrencyFixAmount   = "fix-amount"
+	CurrencyOverPercent = "over-percent"
 )

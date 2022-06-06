@@ -9,6 +9,7 @@ import (
 	"github.com/NpoolPlatform/go-service-framework/pkg/logger"
 	constant "github.com/NpoolPlatform/oracle-manager/pkg/const"
 	crud "github.com/NpoolPlatform/oracle-manager/pkg/crud/currency"
+	currencymw "github.com/NpoolPlatform/oracle-manager/pkg/middleware/currency"
 
 	cruder "github.com/NpoolPlatform/libent-cruder/pkg/cruder"
 	npool "github.com/NpoolPlatform/message/npool/oraclemgr"
@@ -39,6 +40,16 @@ func (s *Server) CreateCurrency(ctx context.Context, in *npool.CreateCurrencyReq
 		logger.Sugar().Errorf("invalid app coin usdt price")
 		return &npool.CreateCurrencyResponse{}, status.Error(codes.Internal, "invalid currency parameter")
 	}
+
+	/*
+		switch in.GetCurrencyMethod() {
+		case constant.CurrencyOverPercent:
+		case constant.CurrencyFixAmount:
+		default:
+			logger.Sugar().Errorf("invalid currency method")
+			return &npool.CreateCurrencyResponse{}, status.Error(codes.Internal, "invalid currency method")
+		}
+	*/
 
 	schema, err := crud.New(ctx, nil)
 	if err != nil {
@@ -97,6 +108,16 @@ func (s *Server) UpdateCurrency(ctx context.Context, in *npool.UpdateCurrencyReq
 		return &npool.UpdateCurrencyResponse{}, status.Error(codes.Internal, "invalid currency parameter")
 	}
 
+	/*
+		switch in.GetCurrencyMethod() {
+		case constant.CurrencyOverPercent:
+		case constant.CurrencyFixAmount:
+		default:
+			logger.Sugar().Errorf("invalid currency method")
+			return &npool.CreateCurrencyResponse{}, status.Error(codes.Internal, "invalid currency method")
+		}
+	*/
+
 	schema, err := crud.New(ctx, nil)
 	if err != nil {
 		logger.Sugar().Errorf("fail create schema entity: %v", err)
@@ -133,7 +154,11 @@ func currencyCondsToConds(conds cruder.FilterConds) (cruder.Conds, error) {
 		case constant.FieldAppID:
 			fallthrough //nolint
 		case constant.FieldCoinTypeID:
+			fallthrough //nolint
+		case constant.CurrencyFieldCurrencyMethod:
 			newConds = newConds.WithCond(k, v.Op, v.Val.GetStringValue())
+		case constant.CurrencyFieldOverPercent:
+			fallthrough //nolint
 		case constant.CurrencyFieldPriceVSUSDT:
 			fallthrough //nolint
 		case constant.CurrencyFieldAppPriceVSUSDT:
@@ -268,4 +293,50 @@ func (s *Server) DeleteCurrency(ctx context.Context, in *npool.DeleteCurrencyReq
 	return &npool.DeleteCurrencyResponse{
 		Info: info,
 	}, nil
+}
+
+func (s *Server) Currencies(ctx context.Context, in *npool.CurrenciesRequest) (*npool.CurrenciesResponse, error) {
+	return &npool.CurrenciesResponse{}, status.Error(codes.Internal, "NOT IMPLEMENTED")
+}
+
+func (s *Server) Currency(ctx context.Context, in *npool.CurrencyRequest) (*npool.CurrencyResponse, error) {
+	conds := cruder.NewConds().
+		WithCond(constant.FieldAppID, cruder.EQ, in.GetAppID()).
+		WithCond(constant.FieldCoinTypeID, cruder.EQ, in.GetCoinTypeID())
+
+	schema, err := crud.New(ctx, nil)
+	if err != nil {
+		logger.Sugar().Errorf("fail create schema entity: %v", err)
+		return &npool.CurrencyResponse{}, status.Errorf(codes.Internal, err.Error())
+	}
+
+	resp := &npool.CurrencyResponse{
+		Info: &npool.CurrencyAmount{
+			CoinTypeID: in.GetCoinTypeID(),
+		},
+	}
+
+	info, err := schema.RowOnly(ctx, conds)
+	if err != nil {
+		logger.Sugar().Errorf("fail get coin currency: %v", err)
+		return &npool.CurrencyResponse{}, status.Errorf(codes.Internal, err.Error())
+	}
+
+	if info != nil {
+		resp.Info.Amount = info.AppPriceVSUSDT
+		return resp, nil
+	}
+
+	infos, err := currencymw.Currencies(ctx, []string{in.GetCoinTypeID()})
+	if err != nil {
+		logger.Sugar().Errorf("fail get coin currency: %v", err)
+		return &npool.CurrencyResponse{}, status.Errorf(codes.Internal, err.Error())
+	}
+	if len(infos) == 0 {
+		logger.Sugar().Errorf("empty coin currency")
+		return &npool.CurrencyResponse{}, status.Errorf(codes.Internal, "empty coin currency")
+	}
+
+	resp.Info.Amount = infos[0].Amount
+	return resp, nil
 }

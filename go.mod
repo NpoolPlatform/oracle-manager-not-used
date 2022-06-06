@@ -4,10 +4,11 @@ go 1.17
 
 require (
 	entgo.io/ent v0.10.1
-	github.com/NpoolPlatform/api-manager v0.0.0-20220121051827-18c807c114dc
-	github.com/NpoolPlatform/go-service-framework v0.0.0-20220120091626-4e8035637592
-	github.com/NpoolPlatform/libent-cruder v0.0.0-20220503113635-28bd9b11b97a
-	github.com/NpoolPlatform/message v0.0.0-20220606085520-65c372096389
+	github.com/NpoolPlatform/api-manager v0.0.0-20220205130236-69d286e72dba
+	github.com/NpoolPlatform/go-service-framework v0.0.0-20220404143809-82c40930388a
+	github.com/NpoolPlatform/libent-cruder v0.0.0-20220526050249-956b54fac9f1
+	github.com/NpoolPlatform/message v0.0.0-20220606114550-2c011507d472
+	github.com/NpoolPlatform/staker-manager v0.0.0-20220606011019-73a7b26ef614
 	github.com/go-resty/resty/v2 v2.7.0
 	github.com/google/uuid v1.3.0
 	github.com/grpc-ecosystem/grpc-gateway/v2 v2.8.0
@@ -86,7 +87,7 @@ require (
 	go.uber.org/zap v1.19.1 // indirect
 	golang.org/x/mod v0.5.1 // indirect
 	golang.org/x/net v0.0.0-20220127200216-cd36cc0744dd // indirect
-	golang.org/x/sys v0.0.0-20220114195835-da31bd327af9 // indirect
+	golang.org/x/sys v0.0.0-20220207234003-57398862261d // indirect
 	golang.org/x/text v0.3.7 // indirect
 	google.golang.org/genproto v0.0.0-20220302033224-9aa15565e42a // indirect
 	gopkg.in/ini.v1 v1.66.2 // indirect
