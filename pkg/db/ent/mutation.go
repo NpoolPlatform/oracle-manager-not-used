@@ -32,23 +32,25 @@ const (
 // CurrencyMutation represents an operation that mutates the Currency nodes in the graph.
 type CurrencyMutation struct {
 	config
-	op               Op
-	typ              string
-	id               *uuid.UUID
-	created_at       *uint32
-	addcreated_at    *int32
-	updated_at       *uint32
-	addupdated_at    *int32
-	deleted_at       *uint32
-	adddeleted_at    *int32
-	app_id           *uuid.UUID
-	coin_type_id     *uuid.UUID
-	price_vs_usdt    *uint64
-	addprice_vs_usdt *int64
-	clearedFields    map[string]struct{}
-	done             bool
-	oldValue         func(context.Context) (*Currency, error)
-	predicates       []predicate.Currency
+	op                   Op
+	typ                  string
+	id                   *uuid.UUID
+	created_at           *uint32
+	addcreated_at        *int32
+	updated_at           *uint32
+	addupdated_at        *int32
+	deleted_at           *uint32
+	adddeleted_at        *int32
+	app_id               *uuid.UUID
+	coin_type_id         *uuid.UUID
+	price_vs_usdt        *uint64
+	addprice_vs_usdt     *int64
+	app_price_vs_usdt    *uint64
+	addapp_price_vs_usdt *int64
+	clearedFields        map[string]struct{}
+	done                 bool
+	oldValue             func(context.Context) (*Currency, error)
+	predicates           []predicate.Currency
 }
 
 var _ ent.Mutation = (*CurrencyMutation)(nil)
@@ -451,6 +453,62 @@ func (m *CurrencyMutation) ResetPriceVsUsdt() {
 	m.addprice_vs_usdt = nil
 }
 
+// SetAppPriceVsUsdt sets the "app_price_vs_usdt" field.
+func (m *CurrencyMutation) SetAppPriceVsUsdt(u uint64) {
+	m.app_price_vs_usdt = &u
+	m.addapp_price_vs_usdt = nil
+}
+
+// AppPriceVsUsdt returns the value of the "app_price_vs_usdt" field in the mutation.
+func (m *CurrencyMutation) AppPriceVsUsdt() (r uint64, exists bool) {
+	v := m.app_price_vs_usdt
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldAppPriceVsUsdt returns the old "app_price_vs_usdt" field's value of the Currency entity.
+// If the Currency object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *CurrencyMutation) OldAppPriceVsUsdt(ctx context.Context) (v uint64, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldAppPriceVsUsdt is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldAppPriceVsUsdt requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldAppPriceVsUsdt: %w", err)
+	}
+	return oldValue.AppPriceVsUsdt, nil
+}
+
+// AddAppPriceVsUsdt adds u to the "app_price_vs_usdt" field.
+func (m *CurrencyMutation) AddAppPriceVsUsdt(u int64) {
+	if m.addapp_price_vs_usdt != nil {
+		*m.addapp_price_vs_usdt += u
+	} else {
+		m.addapp_price_vs_usdt = &u
+	}
+}
+
+// AddedAppPriceVsUsdt returns the value that was added to the "app_price_vs_usdt" field in this mutation.
+func (m *CurrencyMutation) AddedAppPriceVsUsdt() (r int64, exists bool) {
+	v := m.addapp_price_vs_usdt
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// ResetAppPriceVsUsdt resets all changes to the "app_price_vs_usdt" field.
+func (m *CurrencyMutation) ResetAppPriceVsUsdt() {
+	m.app_price_vs_usdt = nil
+	m.addapp_price_vs_usdt = nil
+}
+
 // Where appends a list predicates to the CurrencyMutation builder.
 func (m *CurrencyMutation) Where(ps ...predicate.Currency) {
 	m.predicates = append(m.predicates, ps...)
@@ -470,7 +528,7 @@ func (m *CurrencyMutation) Type() string {
 // order to get all numeric fields that were incremented/decremented, call
 // AddedFields().
 func (m *CurrencyMutation) Fields() []string {
-	fields := make([]string, 0, 6)
+	fields := make([]string, 0, 7)
 	if m.created_at != nil {
 		fields = append(fields, currency.FieldCreatedAt)
 	}
@@ -488,6 +546,9 @@ func (m *CurrencyMutation) Fields() []string {
 	}
 	if m.price_vs_usdt != nil {
 		fields = append(fields, currency.FieldPriceVsUsdt)
+	}
+	if m.app_price_vs_usdt != nil {
+		fields = append(fields, currency.FieldAppPriceVsUsdt)
 	}
 	return fields
 }
@@ -509,6 +570,8 @@ func (m *CurrencyMutation) Field(name string) (ent.Value, bool) {
 		return m.CoinTypeID()
 	case currency.FieldPriceVsUsdt:
 		return m.PriceVsUsdt()
+	case currency.FieldAppPriceVsUsdt:
+		return m.AppPriceVsUsdt()
 	}
 	return nil, false
 }
@@ -530,6 +593,8 @@ func (m *CurrencyMutation) OldField(ctx context.Context, name string) (ent.Value
 		return m.OldCoinTypeID(ctx)
 	case currency.FieldPriceVsUsdt:
 		return m.OldPriceVsUsdt(ctx)
+	case currency.FieldAppPriceVsUsdt:
+		return m.OldAppPriceVsUsdt(ctx)
 	}
 	return nil, fmt.Errorf("unknown Currency field %s", name)
 }
@@ -581,6 +646,13 @@ func (m *CurrencyMutation) SetField(name string, value ent.Value) error {
 		}
 		m.SetPriceVsUsdt(v)
 		return nil
+	case currency.FieldAppPriceVsUsdt:
+		v, ok := value.(uint64)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetAppPriceVsUsdt(v)
+		return nil
 	}
 	return fmt.Errorf("unknown Currency field %s", name)
 }
@@ -601,6 +673,9 @@ func (m *CurrencyMutation) AddedFields() []string {
 	if m.addprice_vs_usdt != nil {
 		fields = append(fields, currency.FieldPriceVsUsdt)
 	}
+	if m.addapp_price_vs_usdt != nil {
+		fields = append(fields, currency.FieldAppPriceVsUsdt)
+	}
 	return fields
 }
 
@@ -617,6 +692,8 @@ func (m *CurrencyMutation) AddedField(name string) (ent.Value, bool) {
 		return m.AddedDeletedAt()
 	case currency.FieldPriceVsUsdt:
 		return m.AddedPriceVsUsdt()
+	case currency.FieldAppPriceVsUsdt:
+		return m.AddedAppPriceVsUsdt()
 	}
 	return nil, false
 }
@@ -653,6 +730,13 @@ func (m *CurrencyMutation) AddField(name string, value ent.Value) error {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
 		m.AddPriceVsUsdt(v)
+		return nil
+	case currency.FieldAppPriceVsUsdt:
+		v, ok := value.(int64)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.AddAppPriceVsUsdt(v)
 		return nil
 	}
 	return fmt.Errorf("unknown Currency numeric field %s", name)
@@ -698,6 +782,9 @@ func (m *CurrencyMutation) ResetField(name string) error {
 		return nil
 	case currency.FieldPriceVsUsdt:
 		m.ResetPriceVsUsdt()
+		return nil
+	case currency.FieldAppPriceVsUsdt:
+		m.ResetAppPriceVsUsdt()
 		return nil
 	}
 	return fmt.Errorf("unknown Currency field %s", name)

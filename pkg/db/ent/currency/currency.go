@@ -24,6 +24,8 @@ const (
 	FieldCoinTypeID = "coin_type_id"
 	// FieldPriceVsUsdt holds the string denoting the price_vs_usdt field in the database.
 	FieldPriceVsUsdt = "price_vs_usdt"
+	// FieldAppPriceVsUsdt holds the string denoting the app_price_vs_usdt field in the database.
+	FieldAppPriceVsUsdt = "app_price_vs_usdt"
 	// Table holds the table name of the currency in the database.
 	Table = "currencies"
 )
@@ -37,6 +39,7 @@ var Columns = []string{
 	FieldAppID,
 	FieldCoinTypeID,
 	FieldPriceVsUsdt,
+	FieldAppPriceVsUsdt,
 }
 
 // ValidColumn reports if the column name is valid (part of the table columns).

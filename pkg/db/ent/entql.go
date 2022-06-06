@@ -26,12 +26,13 @@ var schemaGraph = func() *sqlgraph.Schema {
 		},
 		Type: "Currency",
 		Fields: map[string]*sqlgraph.FieldSpec{
-			currency.FieldCreatedAt:   {Type: field.TypeUint32, Column: currency.FieldCreatedAt},
-			currency.FieldUpdatedAt:   {Type: field.TypeUint32, Column: currency.FieldUpdatedAt},
-			currency.FieldDeletedAt:   {Type: field.TypeUint32, Column: currency.FieldDeletedAt},
-			currency.FieldAppID:       {Type: field.TypeUUID, Column: currency.FieldAppID},
-			currency.FieldCoinTypeID:  {Type: field.TypeUUID, Column: currency.FieldCoinTypeID},
-			currency.FieldPriceVsUsdt: {Type: field.TypeUint64, Column: currency.FieldPriceVsUsdt},
+			currency.FieldCreatedAt:      {Type: field.TypeUint32, Column: currency.FieldCreatedAt},
+			currency.FieldUpdatedAt:      {Type: field.TypeUint32, Column: currency.FieldUpdatedAt},
+			currency.FieldDeletedAt:      {Type: field.TypeUint32, Column: currency.FieldDeletedAt},
+			currency.FieldAppID:          {Type: field.TypeUUID, Column: currency.FieldAppID},
+			currency.FieldCoinTypeID:     {Type: field.TypeUUID, Column: currency.FieldCoinTypeID},
+			currency.FieldPriceVsUsdt:    {Type: field.TypeUint64, Column: currency.FieldPriceVsUsdt},
+			currency.FieldAppPriceVsUsdt: {Type: field.TypeUint64, Column: currency.FieldAppPriceVsUsdt},
 		},
 	}
 	graph.Nodes[1] = &sqlgraph.Node{
@@ -128,6 +129,11 @@ func (f *CurrencyFilter) WhereCoinTypeID(p entql.ValueP) {
 // WherePriceVsUsdt applies the entql uint64 predicate on the price_vs_usdt field.
 func (f *CurrencyFilter) WherePriceVsUsdt(p entql.Uint64P) {
 	f.Where(p.Field(currency.FieldPriceVsUsdt))
+}
+
+// WhereAppPriceVsUsdt applies the entql uint64 predicate on the app_price_vs_usdt field.
+func (f *CurrencyFilter) WhereAppPriceVsUsdt(p entql.Uint64P) {
+	f.Where(p.Field(currency.FieldAppPriceVsUsdt))
 }
 
 // addPredicate implements the predicateAdder interface.

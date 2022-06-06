@@ -116,7 +116,7 @@ func rewardCondsToConds(conds cruder.FilterConds) (cruder.Conds, error) {
 		switch k {
 		case constant.FieldID:
 			fallthrough //nolint
-		case constant.RewardFieldCoinTypeID:
+		case constant.FieldCoinTypeID:
 			newConds = newConds.WithCond(k, v.Op, v.Val.GetStringValue())
 		case constant.RewardFieldDailyReward:
 			newConds = newConds.WithCond(k, v.Op, v.Val.GetNumberValue())

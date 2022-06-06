@@ -28,6 +28,8 @@ type Currency struct {
 	CoinTypeID uuid.UUID `json:"coin_type_id,omitempty"`
 	// PriceVsUsdt holds the value of the "price_vs_usdt" field.
 	PriceVsUsdt uint64 `json:"price_vs_usdt,omitempty"`
+	// AppPriceVsUsdt holds the value of the "app_price_vs_usdt" field.
+	AppPriceVsUsdt uint64 `json:"app_price_vs_usdt,omitempty"`
 }
 
 // scanValues returns the types for scanning values from sql.Rows.
@@ -35,7 +37,7 @@ func (*Currency) scanValues(columns []string) ([]interface{}, error) {
 	values := make([]interface{}, len(columns))
 	for i := range columns {
 		switch columns[i] {
-		case currency.FieldCreatedAt, currency.FieldUpdatedAt, currency.FieldDeletedAt, currency.FieldPriceVsUsdt:
+		case currency.FieldCreatedAt, currency.FieldUpdatedAt, currency.FieldDeletedAt, currency.FieldPriceVsUsdt, currency.FieldAppPriceVsUsdt:
 			values[i] = new(sql.NullInt64)
 		case currency.FieldID, currency.FieldAppID, currency.FieldCoinTypeID:
 			values[i] = new(uuid.UUID)
@@ -96,6 +98,12 @@ func (c *Currency) assignValues(columns []string, values []interface{}) error {
 			} else if value.Valid {
 				c.PriceVsUsdt = uint64(value.Int64)
 			}
+		case currency.FieldAppPriceVsUsdt:
+			if value, ok := values[i].(*sql.NullInt64); !ok {
+				return fmt.Errorf("unexpected type %T for field app_price_vs_usdt", values[i])
+			} else if value.Valid {
+				c.AppPriceVsUsdt = uint64(value.Int64)
+			}
 		}
 	}
 	return nil
@@ -136,6 +144,8 @@ func (c *Currency) String() string {
 	builder.WriteString(fmt.Sprintf("%v", c.CoinTypeID))
 	builder.WriteString(", price_vs_usdt=")
 	builder.WriteString(fmt.Sprintf("%v", c.PriceVsUsdt))
+	builder.WriteString(", app_price_vs_usdt=")
+	builder.WriteString(fmt.Sprintf("%v", c.AppPriceVsUsdt))
 	builder.WriteByte(')')
 	return builder.String()
 }

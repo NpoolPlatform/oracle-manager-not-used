@@ -1,9 +1,14 @@
 package constant
 
-type RewardField string
+type OracleField string
 
 const (
-	FieldID                = "ID"
-	RewardFieldCoinTypeID  = "CoinTypeID"
+	FieldID         = "ID"
+	FieldAppID      = "AppID"
+	FieldCoinTypeID = "CoinTypeID"
+
 	RewardFieldDailyReward = "DailyReward"
+
+	CurrencyFieldPriceVSUSDT    = "PriceVSUSDT"
+	CurrencyFieldAppPriceVSUSDT = "AppPriceVSUSDT"
 )

@@ -133,6 +133,13 @@ func PriceVsUsdt(v uint64) predicate.Currency {
 	})
 }
 
+// AppPriceVsUsdt applies equality check predicate on the "app_price_vs_usdt" field. It's identical to AppPriceVsUsdtEQ.
+func AppPriceVsUsdt(v uint64) predicate.Currency {
+	return predicate.Currency(func(s *sql.Selector) {
+		s.Where(sql.EQ(s.C(FieldAppPriceVsUsdt), v))
+	})
+}
+
 // CreatedAtEQ applies the EQ predicate on the "created_at" field.
 func CreatedAtEQ(v uint32) predicate.Currency {
 	return predicate.Currency(func(s *sql.Selector) {
@@ -586,6 +593,82 @@ func PriceVsUsdtLT(v uint64) predicate.Currency {
 func PriceVsUsdtLTE(v uint64) predicate.Currency {
 	return predicate.Currency(func(s *sql.Selector) {
 		s.Where(sql.LTE(s.C(FieldPriceVsUsdt), v))
+	})
+}
+
+// AppPriceVsUsdtEQ applies the EQ predicate on the "app_price_vs_usdt" field.
+func AppPriceVsUsdtEQ(v uint64) predicate.Currency {
+	return predicate.Currency(func(s *sql.Selector) {
+		s.Where(sql.EQ(s.C(FieldAppPriceVsUsdt), v))
+	})
+}
+
+// AppPriceVsUsdtNEQ applies the NEQ predicate on the "app_price_vs_usdt" field.
+func AppPriceVsUsdtNEQ(v uint64) predicate.Currency {
+	return predicate.Currency(func(s *sql.Selector) {
+		s.Where(sql.NEQ(s.C(FieldAppPriceVsUsdt), v))
+	})
+}
+
+// AppPriceVsUsdtIn applies the In predicate on the "app_price_vs_usdt" field.
+func AppPriceVsUsdtIn(vs ...uint64) predicate.Currency {
+	v := make([]interface{}, len(vs))
+	for i := range v {
+		v[i] = vs[i]
+	}
+	return predicate.Currency(func(s *sql.Selector) {
+		// if not arguments were provided, append the FALSE constants,
+		// since we can't apply "IN ()". This will make this predicate falsy.
+		if len(v) == 0 {
+			s.Where(sql.False())
+			return
+		}
+		s.Where(sql.In(s.C(FieldAppPriceVsUsdt), v...))
+	})
+}
+
+// AppPriceVsUsdtNotIn applies the NotIn predicate on the "app_price_vs_usdt" field.
+func AppPriceVsUsdtNotIn(vs ...uint64) predicate.Currency {
+	v := make([]interface{}, len(vs))
+	for i := range v {
+		v[i] = vs[i]
+	}
+	return predicate.Currency(func(s *sql.Selector) {
+		// if not arguments were provided, append the FALSE constants,
+		// since we can't apply "IN ()". This will make this predicate falsy.
+		if len(v) == 0 {
+			s.Where(sql.False())
+			return
+		}
+		s.Where(sql.NotIn(s.C(FieldAppPriceVsUsdt), v...))
+	})
+}
+
+// AppPriceVsUsdtGT applies the GT predicate on the "app_price_vs_usdt" field.
+func AppPriceVsUsdtGT(v uint64) predicate.Currency {
+	return predicate.Currency(func(s *sql.Selector) {
+		s.Where(sql.GT(s.C(FieldAppPriceVsUsdt), v))
+	})
+}
+
+// AppPriceVsUsdtGTE applies the GTE predicate on the "app_price_vs_usdt" field.
+func AppPriceVsUsdtGTE(v uint64) predicate.Currency {
+	return predicate.Currency(func(s *sql.Selector) {
+		s.Where(sql.GTE(s.C(FieldAppPriceVsUsdt), v))
+	})
+}
+
+// AppPriceVsUsdtLT applies the LT predicate on the "app_price_vs_usdt" field.
+func AppPriceVsUsdtLT(v uint64) predicate.Currency {
+	return predicate.Currency(func(s *sql.Selector) {
+		s.Where(sql.LT(s.C(FieldAppPriceVsUsdt), v))
+	})
+}
+
+// AppPriceVsUsdtLTE applies the LTE predicate on the "app_price_vs_usdt" field.
+func AppPriceVsUsdtLTE(v uint64) predicate.Currency {
+	return predicate.Currency(func(s *sql.Selector) {
+		s.Where(sql.LTE(s.C(FieldAppPriceVsUsdt), v))
 	})
 }
 

@@ -83,6 +83,12 @@ func (cc *CurrencyCreate) SetPriceVsUsdt(u uint64) *CurrencyCreate {
 	return cc
 }
 
+// SetAppPriceVsUsdt sets the "app_price_vs_usdt" field.
+func (cc *CurrencyCreate) SetAppPriceVsUsdt(u uint64) *CurrencyCreate {
+	cc.mutation.SetAppPriceVsUsdt(u)
+	return cc
+}
+
 // SetID sets the "id" field.
 func (cc *CurrencyCreate) SetID(u uuid.UUID) *CurrencyCreate {
 	cc.mutation.SetID(u)
@@ -221,6 +227,9 @@ func (cc *CurrencyCreate) check() error {
 	if _, ok := cc.mutation.PriceVsUsdt(); !ok {
 		return &ValidationError{Name: "price_vs_usdt", err: errors.New(`ent: missing required field "Currency.price_vs_usdt"`)}
 	}
+	if _, ok := cc.mutation.AppPriceVsUsdt(); !ok {
+		return &ValidationError{Name: "app_price_vs_usdt", err: errors.New(`ent: missing required field "Currency.app_price_vs_usdt"`)}
+	}
 	return nil
 }
 
@@ -305,6 +314,14 @@ func (cc *CurrencyCreate) createSpec() (*Currency, *sqlgraph.CreateSpec) {
 			Column: currency.FieldPriceVsUsdt,
 		})
 		_node.PriceVsUsdt = value
+	}
+	if value, ok := cc.mutation.AppPriceVsUsdt(); ok {
+		_spec.Fields = append(_spec.Fields, &sqlgraph.FieldSpec{
+			Type:   field.TypeUint64,
+			Value:  value,
+			Column: currency.FieldAppPriceVsUsdt,
+		})
+		_node.AppPriceVsUsdt = value
 	}
 	return _node, _spec
 }
@@ -453,6 +470,24 @@ func (u *CurrencyUpsert) UpdatePriceVsUsdt() *CurrencyUpsert {
 // AddPriceVsUsdt adds v to the "price_vs_usdt" field.
 func (u *CurrencyUpsert) AddPriceVsUsdt(v uint64) *CurrencyUpsert {
 	u.Add(currency.FieldPriceVsUsdt, v)
+	return u
+}
+
+// SetAppPriceVsUsdt sets the "app_price_vs_usdt" field.
+func (u *CurrencyUpsert) SetAppPriceVsUsdt(v uint64) *CurrencyUpsert {
+	u.Set(currency.FieldAppPriceVsUsdt, v)
+	return u
+}
+
+// UpdateAppPriceVsUsdt sets the "app_price_vs_usdt" field to the value that was provided on create.
+func (u *CurrencyUpsert) UpdateAppPriceVsUsdt() *CurrencyUpsert {
+	u.SetExcluded(currency.FieldAppPriceVsUsdt)
+	return u
+}
+
+// AddAppPriceVsUsdt adds v to the "app_price_vs_usdt" field.
+func (u *CurrencyUpsert) AddAppPriceVsUsdt(v uint64) *CurrencyUpsert {
+	u.Add(currency.FieldAppPriceVsUsdt, v)
 	return u
 }
 
@@ -615,6 +650,27 @@ func (u *CurrencyUpsertOne) AddPriceVsUsdt(v uint64) *CurrencyUpsertOne {
 func (u *CurrencyUpsertOne) UpdatePriceVsUsdt() *CurrencyUpsertOne {
 	return u.Update(func(s *CurrencyUpsert) {
 		s.UpdatePriceVsUsdt()
+	})
+}
+
+// SetAppPriceVsUsdt sets the "app_price_vs_usdt" field.
+func (u *CurrencyUpsertOne) SetAppPriceVsUsdt(v uint64) *CurrencyUpsertOne {
+	return u.Update(func(s *CurrencyUpsert) {
+		s.SetAppPriceVsUsdt(v)
+	})
+}
+
+// AddAppPriceVsUsdt adds v to the "app_price_vs_usdt" field.
+func (u *CurrencyUpsertOne) AddAppPriceVsUsdt(v uint64) *CurrencyUpsertOne {
+	return u.Update(func(s *CurrencyUpsert) {
+		s.AddAppPriceVsUsdt(v)
+	})
+}
+
+// UpdateAppPriceVsUsdt sets the "app_price_vs_usdt" field to the value that was provided on create.
+func (u *CurrencyUpsertOne) UpdateAppPriceVsUsdt() *CurrencyUpsertOne {
+	return u.Update(func(s *CurrencyUpsert) {
+		s.UpdateAppPriceVsUsdt()
 	})
 }
 
@@ -943,6 +999,27 @@ func (u *CurrencyUpsertBulk) AddPriceVsUsdt(v uint64) *CurrencyUpsertBulk {
 func (u *CurrencyUpsertBulk) UpdatePriceVsUsdt() *CurrencyUpsertBulk {
 	return u.Update(func(s *CurrencyUpsert) {
 		s.UpdatePriceVsUsdt()
+	})
+}
+
+// SetAppPriceVsUsdt sets the "app_price_vs_usdt" field.
+func (u *CurrencyUpsertBulk) SetAppPriceVsUsdt(v uint64) *CurrencyUpsertBulk {
+	return u.Update(func(s *CurrencyUpsert) {
+		s.SetAppPriceVsUsdt(v)
+	})
+}
+
+// AddAppPriceVsUsdt adds v to the "app_price_vs_usdt" field.
+func (u *CurrencyUpsertBulk) AddAppPriceVsUsdt(v uint64) *CurrencyUpsertBulk {
+	return u.Update(func(s *CurrencyUpsert) {
+		s.AddAppPriceVsUsdt(v)
+	})
+}
+
+// UpdateAppPriceVsUsdt sets the "app_price_vs_usdt" field to the value that was provided on create.
+func (u *CurrencyUpsertBulk) UpdateAppPriceVsUsdt() *CurrencyUpsertBulk {
+	return u.Update(func(s *CurrencyUpsert) {
+		s.UpdateAppPriceVsUsdt()
 	})
 }
 

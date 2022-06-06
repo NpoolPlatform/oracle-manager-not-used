@@ -108,6 +108,19 @@ func (cu *CurrencyUpdate) AddPriceVsUsdt(u int64) *CurrencyUpdate {
 	return cu
 }
 
+// SetAppPriceVsUsdt sets the "app_price_vs_usdt" field.
+func (cu *CurrencyUpdate) SetAppPriceVsUsdt(u uint64) *CurrencyUpdate {
+	cu.mutation.ResetAppPriceVsUsdt()
+	cu.mutation.SetAppPriceVsUsdt(u)
+	return cu
+}
+
+// AddAppPriceVsUsdt adds u to the "app_price_vs_usdt" field.
+func (cu *CurrencyUpdate) AddAppPriceVsUsdt(u int64) *CurrencyUpdate {
+	cu.mutation.AddAppPriceVsUsdt(u)
+	return cu
+}
+
 // Mutation returns the CurrencyMutation object of the builder.
 func (cu *CurrencyUpdate) Mutation() *CurrencyMutation {
 	return cu.mutation
@@ -270,6 +283,20 @@ func (cu *CurrencyUpdate) sqlSave(ctx context.Context) (n int, err error) {
 			Column: currency.FieldPriceVsUsdt,
 		})
 	}
+	if value, ok := cu.mutation.AppPriceVsUsdt(); ok {
+		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
+			Type:   field.TypeUint64,
+			Value:  value,
+			Column: currency.FieldAppPriceVsUsdt,
+		})
+	}
+	if value, ok := cu.mutation.AddedAppPriceVsUsdt(); ok {
+		_spec.Fields.Add = append(_spec.Fields.Add, &sqlgraph.FieldSpec{
+			Type:   field.TypeUint64,
+			Value:  value,
+			Column: currency.FieldAppPriceVsUsdt,
+		})
+	}
 	if n, err = sqlgraph.UpdateNodes(ctx, cu.driver, _spec); err != nil {
 		if _, ok := err.(*sqlgraph.NotFoundError); ok {
 			err = &NotFoundError{currency.Label}
@@ -366,6 +393,19 @@ func (cuo *CurrencyUpdateOne) SetPriceVsUsdt(u uint64) *CurrencyUpdateOne {
 // AddPriceVsUsdt adds u to the "price_vs_usdt" field.
 func (cuo *CurrencyUpdateOne) AddPriceVsUsdt(u int64) *CurrencyUpdateOne {
 	cuo.mutation.AddPriceVsUsdt(u)
+	return cuo
+}
+
+// SetAppPriceVsUsdt sets the "app_price_vs_usdt" field.
+func (cuo *CurrencyUpdateOne) SetAppPriceVsUsdt(u uint64) *CurrencyUpdateOne {
+	cuo.mutation.ResetAppPriceVsUsdt()
+	cuo.mutation.SetAppPriceVsUsdt(u)
+	return cuo
+}
+
+// AddAppPriceVsUsdt adds u to the "app_price_vs_usdt" field.
+func (cuo *CurrencyUpdateOne) AddAppPriceVsUsdt(u int64) *CurrencyUpdateOne {
+	cuo.mutation.AddAppPriceVsUsdt(u)
 	return cuo
 }
 
@@ -553,6 +593,20 @@ func (cuo *CurrencyUpdateOne) sqlSave(ctx context.Context) (_node *Currency, err
 			Type:   field.TypeUint64,
 			Value:  value,
 			Column: currency.FieldPriceVsUsdt,
+		})
+	}
+	if value, ok := cuo.mutation.AppPriceVsUsdt(); ok {
+		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
+			Type:   field.TypeUint64,
+			Value:  value,
+			Column: currency.FieldAppPriceVsUsdt,
+		})
+	}
+	if value, ok := cuo.mutation.AddedAppPriceVsUsdt(); ok {
+		_spec.Fields.Add = append(_spec.Fields.Add, &sqlgraph.FieldSpec{
+			Type:   field.TypeUint64,
+			Value:  value,
+			Column: currency.FieldAppPriceVsUsdt,
 		})
 	}
 	_node = &Currency{config: cuo.config}

@@ -127,7 +127,7 @@ func (s *Reward) queryFromConds(conds cruder.Conds) (*ent.RewardQuery, error) { 
 				return nil, fmt.Errorf("invalid id: %v", err)
 			}
 			stm = stm.Where(reward.ID(id))
-		case constant.RewardFieldCoinTypeID:
+		case constant.FieldCoinTypeID:
 			id, err := cruder.AnyTypeUUID(v.Val)
 			if err != nil {
 				return nil, fmt.Errorf("invalid coin type id: %v", err)
