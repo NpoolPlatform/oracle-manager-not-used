@@ -41,15 +41,13 @@ func (s *Server) CreateCurrency(ctx context.Context, in *npool.CreateCurrencyReq
 		return &npool.CreateCurrencyResponse{}, status.Error(codes.Internal, "invalid currency parameter")
 	}
 
-	/*
-		switch in.GetCurrencyMethod() {
-		case constant.CurrencyOverPercent:
-		case constant.CurrencyFixAmount:
-		default:
-			logger.Sugar().Errorf("invalid currency method")
-			return &npool.CreateCurrencyResponse{}, status.Error(codes.Internal, "invalid currency method")
-		}
-	*/
+	switch in.GetInfo().GetCurrencyMethod() {
+	case constant.CurrencyOverPercent:
+	case constant.CurrencyFixAmount:
+	default:
+		logger.Sugar().Errorf("invalid currency method")
+		return &npool.CreateCurrencyResponse{}, status.Error(codes.Internal, "invalid currency method")
+	}
 
 	schema, err := crud.New(ctx, nil)
 	if err != nil {
@@ -108,15 +106,13 @@ func (s *Server) UpdateCurrency(ctx context.Context, in *npool.UpdateCurrencyReq
 		return &npool.UpdateCurrencyResponse{}, status.Error(codes.Internal, "invalid currency parameter")
 	}
 
-	/*
-		switch in.GetCurrencyMethod() {
-		case constant.CurrencyOverPercent:
-		case constant.CurrencyFixAmount:
-		default:
-			logger.Sugar().Errorf("invalid currency method")
-			return &npool.CreateCurrencyResponse{}, status.Error(codes.Internal, "invalid currency method")
-		}
-	*/
+	switch in.GetInfo().GetCurrencyMethod() {
+	case constant.CurrencyOverPercent:
+	case constant.CurrencyFixAmount:
+	default:
+		logger.Sugar().Errorf("invalid currency method")
+		return &npool.UpdateCurrencyResponse{}, status.Error(codes.Internal, "invalid currency method")
+	}
 
 	schema, err := crud.New(ctx, nil)
 	if err != nil {
