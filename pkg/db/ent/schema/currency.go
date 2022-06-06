@@ -27,6 +27,8 @@ func (Currency) Fields() []ent.Field {
 		field.UUID("coin_type_id", uuid.UUID{}),
 		field.Uint64("price_vs_usdt"),
 		field.Uint64("app_price_vs_usdt"),
+		field.Int32("over_percent"),
+		field.String("currency_method"),
 	}
 }
 

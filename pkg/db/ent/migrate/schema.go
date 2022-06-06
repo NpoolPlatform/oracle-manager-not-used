@@ -18,6 +18,8 @@ var (
 		{Name: "coin_type_id", Type: field.TypeUUID},
 		{Name: "price_vs_usdt", Type: field.TypeUint64},
 		{Name: "app_price_vs_usdt", Type: field.TypeUint64},
+		{Name: "over_percent", Type: field.TypeInt32},
+		{Name: "currency_method", Type: field.TypeString},
 	}
 	// CurrenciesTable holds the schema information for the "currencies" table.
 	CurrenciesTable = &schema.Table{

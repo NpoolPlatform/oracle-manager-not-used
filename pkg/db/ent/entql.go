@@ -33,6 +33,8 @@ var schemaGraph = func() *sqlgraph.Schema {
 			currency.FieldCoinTypeID:     {Type: field.TypeUUID, Column: currency.FieldCoinTypeID},
 			currency.FieldPriceVsUsdt:    {Type: field.TypeUint64, Column: currency.FieldPriceVsUsdt},
 			currency.FieldAppPriceVsUsdt: {Type: field.TypeUint64, Column: currency.FieldAppPriceVsUsdt},
+			currency.FieldOverPercent:    {Type: field.TypeInt32, Column: currency.FieldOverPercent},
+			currency.FieldCurrencyMethod: {Type: field.TypeString, Column: currency.FieldCurrencyMethod},
 		},
 	}
 	graph.Nodes[1] = &sqlgraph.Node{
@@ -134,6 +136,16 @@ func (f *CurrencyFilter) WherePriceVsUsdt(p entql.Uint64P) {
 // WhereAppPriceVsUsdt applies the entql uint64 predicate on the app_price_vs_usdt field.
 func (f *CurrencyFilter) WhereAppPriceVsUsdt(p entql.Uint64P) {
 	f.Where(p.Field(currency.FieldAppPriceVsUsdt))
+}
+
+// WhereOverPercent applies the entql int32 predicate on the over_percent field.
+func (f *CurrencyFilter) WhereOverPercent(p entql.Int32P) {
+	f.Where(p.Field(currency.FieldOverPercent))
+}
+
+// WhereCurrencyMethod applies the entql string predicate on the currency_method field.
+func (f *CurrencyFilter) WhereCurrencyMethod(p entql.StringP) {
+	f.Where(p.Field(currency.FieldCurrencyMethod))
 }
 
 // addPredicate implements the predicateAdder interface.

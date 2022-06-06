@@ -47,6 +47,9 @@ type CurrencyMutation struct {
 	addprice_vs_usdt     *int64
 	app_price_vs_usdt    *uint64
 	addapp_price_vs_usdt *int64
+	over_percent         *int32
+	addover_percent      *int32
+	currency_method      *string
 	clearedFields        map[string]struct{}
 	done                 bool
 	oldValue             func(context.Context) (*Currency, error)
@@ -509,6 +512,98 @@ func (m *CurrencyMutation) ResetAppPriceVsUsdt() {
 	m.addapp_price_vs_usdt = nil
 }
 
+// SetOverPercent sets the "over_percent" field.
+func (m *CurrencyMutation) SetOverPercent(i int32) {
+	m.over_percent = &i
+	m.addover_percent = nil
+}
+
+// OverPercent returns the value of the "over_percent" field in the mutation.
+func (m *CurrencyMutation) OverPercent() (r int32, exists bool) {
+	v := m.over_percent
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldOverPercent returns the old "over_percent" field's value of the Currency entity.
+// If the Currency object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *CurrencyMutation) OldOverPercent(ctx context.Context) (v int32, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldOverPercent is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldOverPercent requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldOverPercent: %w", err)
+	}
+	return oldValue.OverPercent, nil
+}
+
+// AddOverPercent adds i to the "over_percent" field.
+func (m *CurrencyMutation) AddOverPercent(i int32) {
+	if m.addover_percent != nil {
+		*m.addover_percent += i
+	} else {
+		m.addover_percent = &i
+	}
+}
+
+// AddedOverPercent returns the value that was added to the "over_percent" field in this mutation.
+func (m *CurrencyMutation) AddedOverPercent() (r int32, exists bool) {
+	v := m.addover_percent
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// ResetOverPercent resets all changes to the "over_percent" field.
+func (m *CurrencyMutation) ResetOverPercent() {
+	m.over_percent = nil
+	m.addover_percent = nil
+}
+
+// SetCurrencyMethod sets the "currency_method" field.
+func (m *CurrencyMutation) SetCurrencyMethod(s string) {
+	m.currency_method = &s
+}
+
+// CurrencyMethod returns the value of the "currency_method" field in the mutation.
+func (m *CurrencyMutation) CurrencyMethod() (r string, exists bool) {
+	v := m.currency_method
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldCurrencyMethod returns the old "currency_method" field's value of the Currency entity.
+// If the Currency object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *CurrencyMutation) OldCurrencyMethod(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldCurrencyMethod is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldCurrencyMethod requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldCurrencyMethod: %w", err)
+	}
+	return oldValue.CurrencyMethod, nil
+}
+
+// ResetCurrencyMethod resets all changes to the "currency_method" field.
+func (m *CurrencyMutation) ResetCurrencyMethod() {
+	m.currency_method = nil
+}
+
 // Where appends a list predicates to the CurrencyMutation builder.
 func (m *CurrencyMutation) Where(ps ...predicate.Currency) {
 	m.predicates = append(m.predicates, ps...)
@@ -528,7 +623,7 @@ func (m *CurrencyMutation) Type() string {
 // order to get all numeric fields that were incremented/decremented, call
 // AddedFields().
 func (m *CurrencyMutation) Fields() []string {
-	fields := make([]string, 0, 7)
+	fields := make([]string, 0, 9)
 	if m.created_at != nil {
 		fields = append(fields, currency.FieldCreatedAt)
 	}
@@ -549,6 +644,12 @@ func (m *CurrencyMutation) Fields() []string {
 	}
 	if m.app_price_vs_usdt != nil {
 		fields = append(fields, currency.FieldAppPriceVsUsdt)
+	}
+	if m.over_percent != nil {
+		fields = append(fields, currency.FieldOverPercent)
+	}
+	if m.currency_method != nil {
+		fields = append(fields, currency.FieldCurrencyMethod)
 	}
 	return fields
 }
@@ -572,6 +673,10 @@ func (m *CurrencyMutation) Field(name string) (ent.Value, bool) {
 		return m.PriceVsUsdt()
 	case currency.FieldAppPriceVsUsdt:
 		return m.AppPriceVsUsdt()
+	case currency.FieldOverPercent:
+		return m.OverPercent()
+	case currency.FieldCurrencyMethod:
+		return m.CurrencyMethod()
 	}
 	return nil, false
 }
@@ -595,6 +700,10 @@ func (m *CurrencyMutation) OldField(ctx context.Context, name string) (ent.Value
 		return m.OldPriceVsUsdt(ctx)
 	case currency.FieldAppPriceVsUsdt:
 		return m.OldAppPriceVsUsdt(ctx)
+	case currency.FieldOverPercent:
+		return m.OldOverPercent(ctx)
+	case currency.FieldCurrencyMethod:
+		return m.OldCurrencyMethod(ctx)
 	}
 	return nil, fmt.Errorf("unknown Currency field %s", name)
 }
@@ -653,6 +762,20 @@ func (m *CurrencyMutation) SetField(name string, value ent.Value) error {
 		}
 		m.SetAppPriceVsUsdt(v)
 		return nil
+	case currency.FieldOverPercent:
+		v, ok := value.(int32)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetOverPercent(v)
+		return nil
+	case currency.FieldCurrencyMethod:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetCurrencyMethod(v)
+		return nil
 	}
 	return fmt.Errorf("unknown Currency field %s", name)
 }
@@ -676,6 +799,9 @@ func (m *CurrencyMutation) AddedFields() []string {
 	if m.addapp_price_vs_usdt != nil {
 		fields = append(fields, currency.FieldAppPriceVsUsdt)
 	}
+	if m.addover_percent != nil {
+		fields = append(fields, currency.FieldOverPercent)
+	}
 	return fields
 }
 
@@ -694,6 +820,8 @@ func (m *CurrencyMutation) AddedField(name string) (ent.Value, bool) {
 		return m.AddedPriceVsUsdt()
 	case currency.FieldAppPriceVsUsdt:
 		return m.AddedAppPriceVsUsdt()
+	case currency.FieldOverPercent:
+		return m.AddedOverPercent()
 	}
 	return nil, false
 }
@@ -737,6 +865,13 @@ func (m *CurrencyMutation) AddField(name string, value ent.Value) error {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
 		m.AddAppPriceVsUsdt(v)
+		return nil
+	case currency.FieldOverPercent:
+		v, ok := value.(int32)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.AddOverPercent(v)
 		return nil
 	}
 	return fmt.Errorf("unknown Currency numeric field %s", name)
@@ -785,6 +920,12 @@ func (m *CurrencyMutation) ResetField(name string) error {
 		return nil
 	case currency.FieldAppPriceVsUsdt:
 		m.ResetAppPriceVsUsdt()
+		return nil
+	case currency.FieldOverPercent:
+		m.ResetOverPercent()
+		return nil
+	case currency.FieldCurrencyMethod:
+		m.ResetCurrencyMethod()
 		return nil
 	}
 	return fmt.Errorf("unknown Currency field %s", name)

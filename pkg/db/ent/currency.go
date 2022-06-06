@@ -30,6 +30,10 @@ type Currency struct {
 	PriceVsUsdt uint64 `json:"price_vs_usdt,omitempty"`
 	// AppPriceVsUsdt holds the value of the "app_price_vs_usdt" field.
 	AppPriceVsUsdt uint64 `json:"app_price_vs_usdt,omitempty"`
+	// OverPercent holds the value of the "over_percent" field.
+	OverPercent int32 `json:"over_percent,omitempty"`
+	// CurrencyMethod holds the value of the "currency_method" field.
+	CurrencyMethod string `json:"currency_method,omitempty"`
 }
 
 // scanValues returns the types for scanning values from sql.Rows.
@@ -37,8 +41,10 @@ func (*Currency) scanValues(columns []string) ([]interface{}, error) {
 	values := make([]interface{}, len(columns))
 	for i := range columns {
 		switch columns[i] {
-		case currency.FieldCreatedAt, currency.FieldUpdatedAt, currency.FieldDeletedAt, currency.FieldPriceVsUsdt, currency.FieldAppPriceVsUsdt:
+		case currency.FieldCreatedAt, currency.FieldUpdatedAt, currency.FieldDeletedAt, currency.FieldPriceVsUsdt, currency.FieldAppPriceVsUsdt, currency.FieldOverPercent:
 			values[i] = new(sql.NullInt64)
+		case currency.FieldCurrencyMethod:
+			values[i] = new(sql.NullString)
 		case currency.FieldID, currency.FieldAppID, currency.FieldCoinTypeID:
 			values[i] = new(uuid.UUID)
 		default:
@@ -104,6 +110,18 @@ func (c *Currency) assignValues(columns []string, values []interface{}) error {
 			} else if value.Valid {
 				c.AppPriceVsUsdt = uint64(value.Int64)
 			}
+		case currency.FieldOverPercent:
+			if value, ok := values[i].(*sql.NullInt64); !ok {
+				return fmt.Errorf("unexpected type %T for field over_percent", values[i])
+			} else if value.Valid {
+				c.OverPercent = int32(value.Int64)
+			}
+		case currency.FieldCurrencyMethod:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field currency_method", values[i])
+			} else if value.Valid {
+				c.CurrencyMethod = value.String
+			}
 		}
 	}
 	return nil
@@ -146,6 +164,10 @@ func (c *Currency) String() string {
 	builder.WriteString(fmt.Sprintf("%v", c.PriceVsUsdt))
 	builder.WriteString(", app_price_vs_usdt=")
 	builder.WriteString(fmt.Sprintf("%v", c.AppPriceVsUsdt))
+	builder.WriteString(", over_percent=")
+	builder.WriteString(fmt.Sprintf("%v", c.OverPercent))
+	builder.WriteString(", currency_method=")
+	builder.WriteString(c.CurrencyMethod)
 	builder.WriteByte(')')
 	return builder.String()
 }

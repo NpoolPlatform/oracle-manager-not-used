@@ -140,6 +140,20 @@ func AppPriceVsUsdt(v uint64) predicate.Currency {
 	})
 }
 
+// OverPercent applies equality check predicate on the "over_percent" field. It's identical to OverPercentEQ.
+func OverPercent(v int32) predicate.Currency {
+	return predicate.Currency(func(s *sql.Selector) {
+		s.Where(sql.EQ(s.C(FieldOverPercent), v))
+	})
+}
+
+// CurrencyMethod applies equality check predicate on the "currency_method" field. It's identical to CurrencyMethodEQ.
+func CurrencyMethod(v string) predicate.Currency {
+	return predicate.Currency(func(s *sql.Selector) {
+		s.Where(sql.EQ(s.C(FieldCurrencyMethod), v))
+	})
+}
+
 // CreatedAtEQ applies the EQ predicate on the "created_at" field.
 func CreatedAtEQ(v uint32) predicate.Currency {
 	return predicate.Currency(func(s *sql.Selector) {
@@ -669,6 +683,193 @@ func AppPriceVsUsdtLT(v uint64) predicate.Currency {
 func AppPriceVsUsdtLTE(v uint64) predicate.Currency {
 	return predicate.Currency(func(s *sql.Selector) {
 		s.Where(sql.LTE(s.C(FieldAppPriceVsUsdt), v))
+	})
+}
+
+// OverPercentEQ applies the EQ predicate on the "over_percent" field.
+func OverPercentEQ(v int32) predicate.Currency {
+	return predicate.Currency(func(s *sql.Selector) {
+		s.Where(sql.EQ(s.C(FieldOverPercent), v))
+	})
+}
+
+// OverPercentNEQ applies the NEQ predicate on the "over_percent" field.
+func OverPercentNEQ(v int32) predicate.Currency {
+	return predicate.Currency(func(s *sql.Selector) {
+		s.Where(sql.NEQ(s.C(FieldOverPercent), v))
+	})
+}
+
+// OverPercentIn applies the In predicate on the "over_percent" field.
+func OverPercentIn(vs ...int32) predicate.Currency {
+	v := make([]interface{}, len(vs))
+	for i := range v {
+		v[i] = vs[i]
+	}
+	return predicate.Currency(func(s *sql.Selector) {
+		// if not arguments were provided, append the FALSE constants,
+		// since we can't apply "IN ()". This will make this predicate falsy.
+		if len(v) == 0 {
+			s.Where(sql.False())
+			return
+		}
+		s.Where(sql.In(s.C(FieldOverPercent), v...))
+	})
+}
+
+// OverPercentNotIn applies the NotIn predicate on the "over_percent" field.
+func OverPercentNotIn(vs ...int32) predicate.Currency {
+	v := make([]interface{}, len(vs))
+	for i := range v {
+		v[i] = vs[i]
+	}
+	return predicate.Currency(func(s *sql.Selector) {
+		// if not arguments were provided, append the FALSE constants,
+		// since we can't apply "IN ()". This will make this predicate falsy.
+		if len(v) == 0 {
+			s.Where(sql.False())
+			return
+		}
+		s.Where(sql.NotIn(s.C(FieldOverPercent), v...))
+	})
+}
+
+// OverPercentGT applies the GT predicate on the "over_percent" field.
+func OverPercentGT(v int32) predicate.Currency {
+	return predicate.Currency(func(s *sql.Selector) {
+		s.Where(sql.GT(s.C(FieldOverPercent), v))
+	})
+}
+
+// OverPercentGTE applies the GTE predicate on the "over_percent" field.
+func OverPercentGTE(v int32) predicate.Currency {
+	return predicate.Currency(func(s *sql.Selector) {
+		s.Where(sql.GTE(s.C(FieldOverPercent), v))
+	})
+}
+
+// OverPercentLT applies the LT predicate on the "over_percent" field.
+func OverPercentLT(v int32) predicate.Currency {
+	return predicate.Currency(func(s *sql.Selector) {
+		s.Where(sql.LT(s.C(FieldOverPercent), v))
+	})
+}
+
+// OverPercentLTE applies the LTE predicate on the "over_percent" field.
+func OverPercentLTE(v int32) predicate.Currency {
+	return predicate.Currency(func(s *sql.Selector) {
+		s.Where(sql.LTE(s.C(FieldOverPercent), v))
+	})
+}
+
+// CurrencyMethodEQ applies the EQ predicate on the "currency_method" field.
+func CurrencyMethodEQ(v string) predicate.Currency {
+	return predicate.Currency(func(s *sql.Selector) {
+		s.Where(sql.EQ(s.C(FieldCurrencyMethod), v))
+	})
+}
+
+// CurrencyMethodNEQ applies the NEQ predicate on the "currency_method" field.
+func CurrencyMethodNEQ(v string) predicate.Currency {
+	return predicate.Currency(func(s *sql.Selector) {
+		s.Where(sql.NEQ(s.C(FieldCurrencyMethod), v))
+	})
+}
+
+// CurrencyMethodIn applies the In predicate on the "currency_method" field.
+func CurrencyMethodIn(vs ...string) predicate.Currency {
+	v := make([]interface{}, len(vs))
+	for i := range v {
+		v[i] = vs[i]
+	}
+	return predicate.Currency(func(s *sql.Selector) {
+		// if not arguments were provided, append the FALSE constants,
+		// since we can't apply "IN ()". This will make this predicate falsy.
+		if len(v) == 0 {
+			s.Where(sql.False())
+			return
+		}
+		s.Where(sql.In(s.C(FieldCurrencyMethod), v...))
+	})
+}
+
+// CurrencyMethodNotIn applies the NotIn predicate on the "currency_method" field.
+func CurrencyMethodNotIn(vs ...string) predicate.Currency {
+	v := make([]interface{}, len(vs))
+	for i := range v {
+		v[i] = vs[i]
+	}
+	return predicate.Currency(func(s *sql.Selector) {
+		// if not arguments were provided, append the FALSE constants,
+		// since we can't apply "IN ()". This will make this predicate falsy.
+		if len(v) == 0 {
+			s.Where(sql.False())
+			return
+		}
+		s.Where(sql.NotIn(s.C(FieldCurrencyMethod), v...))
+	})
+}
+
+// CurrencyMethodGT applies the GT predicate on the "currency_method" field.
+func CurrencyMethodGT(v string) predicate.Currency {
+	return predicate.Currency(func(s *sql.Selector) {
+		s.Where(sql.GT(s.C(FieldCurrencyMethod), v))
+	})
+}
+
+// CurrencyMethodGTE applies the GTE predicate on the "currency_method" field.
+func CurrencyMethodGTE(v string) predicate.Currency {
+	return predicate.Currency(func(s *sql.Selector) {
+		s.Where(sql.GTE(s.C(FieldCurrencyMethod), v))
+	})
+}
+
+// CurrencyMethodLT applies the LT predicate on the "currency_method" field.
+func CurrencyMethodLT(v string) predicate.Currency {
+	return predicate.Currency(func(s *sql.Selector) {
+		s.Where(sql.LT(s.C(FieldCurrencyMethod), v))
+	})
+}
+
+// CurrencyMethodLTE applies the LTE predicate on the "currency_method" field.
+func CurrencyMethodLTE(v string) predicate.Currency {
+	return predicate.Currency(func(s *sql.Selector) {
+		s.Where(sql.LTE(s.C(FieldCurrencyMethod), v))
+	})
+}
+
+// CurrencyMethodContains applies the Contains predicate on the "currency_method" field.
+func CurrencyMethodContains(v string) predicate.Currency {
+	return predicate.Currency(func(s *sql.Selector) {
+		s.Where(sql.Contains(s.C(FieldCurrencyMethod), v))
+	})
+}
+
+// CurrencyMethodHasPrefix applies the HasPrefix predicate on the "currency_method" field.
+func CurrencyMethodHasPrefix(v string) predicate.Currency {
+	return predicate.Currency(func(s *sql.Selector) {
+		s.Where(sql.HasPrefix(s.C(FieldCurrencyMethod), v))
+	})
+}
+
+// CurrencyMethodHasSuffix applies the HasSuffix predicate on the "currency_method" field.
+func CurrencyMethodHasSuffix(v string) predicate.Currency {
+	return predicate.Currency(func(s *sql.Selector) {
+		s.Where(sql.HasSuffix(s.C(FieldCurrencyMethod), v))
+	})
+}
+
+// CurrencyMethodEqualFold applies the EqualFold predicate on the "currency_method" field.
+func CurrencyMethodEqualFold(v string) predicate.Currency {
+	return predicate.Currency(func(s *sql.Selector) {
+		s.Where(sql.EqualFold(s.C(FieldCurrencyMethod), v))
+	})
+}
+
+// CurrencyMethodContainsFold applies the ContainsFold predicate on the "currency_method" field.
+func CurrencyMethodContainsFold(v string) predicate.Currency {
+	return predicate.Currency(func(s *sql.Selector) {
+		s.Where(sql.ContainsFold(s.C(FieldCurrencyMethod), v))
 	})
 }
 

@@ -89,6 +89,18 @@ func (cc *CurrencyCreate) SetAppPriceVsUsdt(u uint64) *CurrencyCreate {
 	return cc
 }
 
+// SetOverPercent sets the "over_percent" field.
+func (cc *CurrencyCreate) SetOverPercent(i int32) *CurrencyCreate {
+	cc.mutation.SetOverPercent(i)
+	return cc
+}
+
+// SetCurrencyMethod sets the "currency_method" field.
+func (cc *CurrencyCreate) SetCurrencyMethod(s string) *CurrencyCreate {
+	cc.mutation.SetCurrencyMethod(s)
+	return cc
+}
+
 // SetID sets the "id" field.
 func (cc *CurrencyCreate) SetID(u uuid.UUID) *CurrencyCreate {
 	cc.mutation.SetID(u)
@@ -230,6 +242,12 @@ func (cc *CurrencyCreate) check() error {
 	if _, ok := cc.mutation.AppPriceVsUsdt(); !ok {
 		return &ValidationError{Name: "app_price_vs_usdt", err: errors.New(`ent: missing required field "Currency.app_price_vs_usdt"`)}
 	}
+	if _, ok := cc.mutation.OverPercent(); !ok {
+		return &ValidationError{Name: "over_percent", err: errors.New(`ent: missing required field "Currency.over_percent"`)}
+	}
+	if _, ok := cc.mutation.CurrencyMethod(); !ok {
+		return &ValidationError{Name: "currency_method", err: errors.New(`ent: missing required field "Currency.currency_method"`)}
+	}
 	return nil
 }
 
@@ -322,6 +340,22 @@ func (cc *CurrencyCreate) createSpec() (*Currency, *sqlgraph.CreateSpec) {
 			Column: currency.FieldAppPriceVsUsdt,
 		})
 		_node.AppPriceVsUsdt = value
+	}
+	if value, ok := cc.mutation.OverPercent(); ok {
+		_spec.Fields = append(_spec.Fields, &sqlgraph.FieldSpec{
+			Type:   field.TypeInt32,
+			Value:  value,
+			Column: currency.FieldOverPercent,
+		})
+		_node.OverPercent = value
+	}
+	if value, ok := cc.mutation.CurrencyMethod(); ok {
+		_spec.Fields = append(_spec.Fields, &sqlgraph.FieldSpec{
+			Type:   field.TypeString,
+			Value:  value,
+			Column: currency.FieldCurrencyMethod,
+		})
+		_node.CurrencyMethod = value
 	}
 	return _node, _spec
 }
@@ -488,6 +522,36 @@ func (u *CurrencyUpsert) UpdateAppPriceVsUsdt() *CurrencyUpsert {
 // AddAppPriceVsUsdt adds v to the "app_price_vs_usdt" field.
 func (u *CurrencyUpsert) AddAppPriceVsUsdt(v uint64) *CurrencyUpsert {
 	u.Add(currency.FieldAppPriceVsUsdt, v)
+	return u
+}
+
+// SetOverPercent sets the "over_percent" field.
+func (u *CurrencyUpsert) SetOverPercent(v int32) *CurrencyUpsert {
+	u.Set(currency.FieldOverPercent, v)
+	return u
+}
+
+// UpdateOverPercent sets the "over_percent" field to the value that was provided on create.
+func (u *CurrencyUpsert) UpdateOverPercent() *CurrencyUpsert {
+	u.SetExcluded(currency.FieldOverPercent)
+	return u
+}
+
+// AddOverPercent adds v to the "over_percent" field.
+func (u *CurrencyUpsert) AddOverPercent(v int32) *CurrencyUpsert {
+	u.Add(currency.FieldOverPercent, v)
+	return u
+}
+
+// SetCurrencyMethod sets the "currency_method" field.
+func (u *CurrencyUpsert) SetCurrencyMethod(v string) *CurrencyUpsert {
+	u.Set(currency.FieldCurrencyMethod, v)
+	return u
+}
+
+// UpdateCurrencyMethod sets the "currency_method" field to the value that was provided on create.
+func (u *CurrencyUpsert) UpdateCurrencyMethod() *CurrencyUpsert {
+	u.SetExcluded(currency.FieldCurrencyMethod)
 	return u
 }
 
@@ -671,6 +735,41 @@ func (u *CurrencyUpsertOne) AddAppPriceVsUsdt(v uint64) *CurrencyUpsertOne {
 func (u *CurrencyUpsertOne) UpdateAppPriceVsUsdt() *CurrencyUpsertOne {
 	return u.Update(func(s *CurrencyUpsert) {
 		s.UpdateAppPriceVsUsdt()
+	})
+}
+
+// SetOverPercent sets the "over_percent" field.
+func (u *CurrencyUpsertOne) SetOverPercent(v int32) *CurrencyUpsertOne {
+	return u.Update(func(s *CurrencyUpsert) {
+		s.SetOverPercent(v)
+	})
+}
+
+// AddOverPercent adds v to the "over_percent" field.
+func (u *CurrencyUpsertOne) AddOverPercent(v int32) *CurrencyUpsertOne {
+	return u.Update(func(s *CurrencyUpsert) {
+		s.AddOverPercent(v)
+	})
+}
+
+// UpdateOverPercent sets the "over_percent" field to the value that was provided on create.
+func (u *CurrencyUpsertOne) UpdateOverPercent() *CurrencyUpsertOne {
+	return u.Update(func(s *CurrencyUpsert) {
+		s.UpdateOverPercent()
+	})
+}
+
+// SetCurrencyMethod sets the "currency_method" field.
+func (u *CurrencyUpsertOne) SetCurrencyMethod(v string) *CurrencyUpsertOne {
+	return u.Update(func(s *CurrencyUpsert) {
+		s.SetCurrencyMethod(v)
+	})
+}
+
+// UpdateCurrencyMethod sets the "currency_method" field to the value that was provided on create.
+func (u *CurrencyUpsertOne) UpdateCurrencyMethod() *CurrencyUpsertOne {
+	return u.Update(func(s *CurrencyUpsert) {
+		s.UpdateCurrencyMethod()
 	})
 }
 
@@ -1020,6 +1119,41 @@ func (u *CurrencyUpsertBulk) AddAppPriceVsUsdt(v uint64) *CurrencyUpsertBulk {
 func (u *CurrencyUpsertBulk) UpdateAppPriceVsUsdt() *CurrencyUpsertBulk {
 	return u.Update(func(s *CurrencyUpsert) {
 		s.UpdateAppPriceVsUsdt()
+	})
+}
+
+// SetOverPercent sets the "over_percent" field.
+func (u *CurrencyUpsertBulk) SetOverPercent(v int32) *CurrencyUpsertBulk {
+	return u.Update(func(s *CurrencyUpsert) {
+		s.SetOverPercent(v)
+	})
+}
+
+// AddOverPercent adds v to the "over_percent" field.
+func (u *CurrencyUpsertBulk) AddOverPercent(v int32) *CurrencyUpsertBulk {
+	return u.Update(func(s *CurrencyUpsert) {
+		s.AddOverPercent(v)
+	})
+}
+
+// UpdateOverPercent sets the "over_percent" field to the value that was provided on create.
+func (u *CurrencyUpsertBulk) UpdateOverPercent() *CurrencyUpsertBulk {
+	return u.Update(func(s *CurrencyUpsert) {
+		s.UpdateOverPercent()
+	})
+}
+
+// SetCurrencyMethod sets the "currency_method" field.
+func (u *CurrencyUpsertBulk) SetCurrencyMethod(v string) *CurrencyUpsertBulk {
+	return u.Update(func(s *CurrencyUpsert) {
+		s.SetCurrencyMethod(v)
+	})
+}
+
+// UpdateCurrencyMethod sets the "currency_method" field to the value that was provided on create.
+func (u *CurrencyUpsertBulk) UpdateCurrencyMethod() *CurrencyUpsertBulk {
+	return u.Update(func(s *CurrencyUpsert) {
+		s.UpdateCurrencyMethod()
 	})
 }
 

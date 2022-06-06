@@ -121,6 +121,25 @@ func (cu *CurrencyUpdate) AddAppPriceVsUsdt(u int64) *CurrencyUpdate {
 	return cu
 }
 
+// SetOverPercent sets the "over_percent" field.
+func (cu *CurrencyUpdate) SetOverPercent(i int32) *CurrencyUpdate {
+	cu.mutation.ResetOverPercent()
+	cu.mutation.SetOverPercent(i)
+	return cu
+}
+
+// AddOverPercent adds i to the "over_percent" field.
+func (cu *CurrencyUpdate) AddOverPercent(i int32) *CurrencyUpdate {
+	cu.mutation.AddOverPercent(i)
+	return cu
+}
+
+// SetCurrencyMethod sets the "currency_method" field.
+func (cu *CurrencyUpdate) SetCurrencyMethod(s string) *CurrencyUpdate {
+	cu.mutation.SetCurrencyMethod(s)
+	return cu
+}
+
 // Mutation returns the CurrencyMutation object of the builder.
 func (cu *CurrencyUpdate) Mutation() *CurrencyMutation {
 	return cu.mutation
@@ -297,6 +316,27 @@ func (cu *CurrencyUpdate) sqlSave(ctx context.Context) (n int, err error) {
 			Column: currency.FieldAppPriceVsUsdt,
 		})
 	}
+	if value, ok := cu.mutation.OverPercent(); ok {
+		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
+			Type:   field.TypeInt32,
+			Value:  value,
+			Column: currency.FieldOverPercent,
+		})
+	}
+	if value, ok := cu.mutation.AddedOverPercent(); ok {
+		_spec.Fields.Add = append(_spec.Fields.Add, &sqlgraph.FieldSpec{
+			Type:   field.TypeInt32,
+			Value:  value,
+			Column: currency.FieldOverPercent,
+		})
+	}
+	if value, ok := cu.mutation.CurrencyMethod(); ok {
+		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
+			Type:   field.TypeString,
+			Value:  value,
+			Column: currency.FieldCurrencyMethod,
+		})
+	}
 	if n, err = sqlgraph.UpdateNodes(ctx, cu.driver, _spec); err != nil {
 		if _, ok := err.(*sqlgraph.NotFoundError); ok {
 			err = &NotFoundError{currency.Label}
@@ -406,6 +446,25 @@ func (cuo *CurrencyUpdateOne) SetAppPriceVsUsdt(u uint64) *CurrencyUpdateOne {
 // AddAppPriceVsUsdt adds u to the "app_price_vs_usdt" field.
 func (cuo *CurrencyUpdateOne) AddAppPriceVsUsdt(u int64) *CurrencyUpdateOne {
 	cuo.mutation.AddAppPriceVsUsdt(u)
+	return cuo
+}
+
+// SetOverPercent sets the "over_percent" field.
+func (cuo *CurrencyUpdateOne) SetOverPercent(i int32) *CurrencyUpdateOne {
+	cuo.mutation.ResetOverPercent()
+	cuo.mutation.SetOverPercent(i)
+	return cuo
+}
+
+// AddOverPercent adds i to the "over_percent" field.
+func (cuo *CurrencyUpdateOne) AddOverPercent(i int32) *CurrencyUpdateOne {
+	cuo.mutation.AddOverPercent(i)
+	return cuo
+}
+
+// SetCurrencyMethod sets the "currency_method" field.
+func (cuo *CurrencyUpdateOne) SetCurrencyMethod(s string) *CurrencyUpdateOne {
+	cuo.mutation.SetCurrencyMethod(s)
 	return cuo
 }
 
@@ -607,6 +666,27 @@ func (cuo *CurrencyUpdateOne) sqlSave(ctx context.Context) (_node *Currency, err
 			Type:   field.TypeUint64,
 			Value:  value,
 			Column: currency.FieldAppPriceVsUsdt,
+		})
+	}
+	if value, ok := cuo.mutation.OverPercent(); ok {
+		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
+			Type:   field.TypeInt32,
+			Value:  value,
+			Column: currency.FieldOverPercent,
+		})
+	}
+	if value, ok := cuo.mutation.AddedOverPercent(); ok {
+		_spec.Fields.Add = append(_spec.Fields.Add, &sqlgraph.FieldSpec{
+			Type:   field.TypeInt32,
+			Value:  value,
+			Column: currency.FieldOverPercent,
+		})
+	}
+	if value, ok := cuo.mutation.CurrencyMethod(); ok {
+		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
+			Type:   field.TypeString,
+			Value:  value,
+			Column: currency.FieldCurrencyMethod,
 		})
 	}
 	_node = &Currency{config: cuo.config}
