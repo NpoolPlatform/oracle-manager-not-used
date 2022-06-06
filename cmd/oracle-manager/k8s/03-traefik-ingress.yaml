@@ -83,6 +83,10 @@ spec:
             backend:
               serviceName: oracle-manager
               servicePort: 50290
+          - path: /api/oracle-manager/v1/create/app
+            backend:
+              serviceName: oracle-manager
+              servicePort: 50290
     - host: api.procyon.vip
       http: *http_rules
     - host: api.xpool.top
