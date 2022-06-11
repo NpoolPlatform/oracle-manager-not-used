@@ -20,6 +20,9 @@ func MapCoin(coinName string) string {
 		"sol":        "solana",
 		"solana":     "solana",
 		"tsolana":    "solana",
+		"trx":        "tron",
+		"tron":       "tron",
+		"ttron":      "tron",
 	}
 	if coin, ok := coinMap[coinName]; ok {
 		return coin
