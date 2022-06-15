@@ -23,7 +23,7 @@ func MapCoin(coinName string) string {
 		"tbinancecoin": "binancecoin",
 		"binancecoin":  "binancecoin",
 		"tbinanceusd":  "binance-usd",
-		"bianaceusd":   "binance-busd",
+		"bianaceusd":   "binance-usd",
 	}
 	if coin, ok := coinMap[coinName]; ok {
 		return coin
