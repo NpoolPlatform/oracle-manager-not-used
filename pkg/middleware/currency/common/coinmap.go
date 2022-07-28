@@ -26,6 +26,8 @@ func MapCoin(coinName string) string {
 		"binanceusd":   "binance-usd",
 		"ttron":        "tron",
 		"tron":         "tron",
+		"tusdcerc20":   "tusdcerc20",
+		"usdcerc20":    "usdcerc20",
 	}
 	if coin, ok := coinMap[coinName]; ok {
 		return coin
@@ -43,6 +45,7 @@ func PriceCoin(coinName string) bool {
 		"usdttrc20":   "tether",
 		"tbinanceusd": "binance-usd",
 		"binanceusd":  "binance-usd",
+		"usdcerc20":   "usdc",
 	}
 	_, ok := priceMap[coinName]
 	return ok
