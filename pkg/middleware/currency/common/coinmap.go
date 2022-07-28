@@ -45,6 +45,7 @@ func PriceCoin(coinName string) bool {
 		"usdttrc20":   "tether",
 		"tbinanceusd": "binance-usd",
 		"binanceusd":  "binance-usd",
+		"tusdcerc20":  "usdc",
 		"usdcerc20":   "usdc",
 	}
 	_, ok := priceMap[coinName]
