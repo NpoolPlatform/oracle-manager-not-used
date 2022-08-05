@@ -96,9 +96,6 @@ func (s *Currency) Row(ctx context.Context, id uuid.UUID) (*npool.Currency, erro
 
 	err = db.WithTx(ctx, s.Tx, func(_ctx context.Context) error {
 		info, err = s.Tx.Currency.Query().Where(currency.ID(id)).Only(_ctx)
-		if ent.IsNotFound(err) {
-			return nil
-		}
 		return err
 	})
 	if err != nil {
