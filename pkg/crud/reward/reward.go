@@ -34,6 +34,10 @@ func New(ctx context.Context, tx *ent.Tx) (*Reward, error) {
 }
 
 func (s *Reward) rowToObject(row *ent.Reward) *npool.Reward {
+	if row == nil {
+		return nil
+	}
+
 	return &npool.Reward{
 		ID:          row.ID.String(),
 		CoinTypeID:  row.CoinTypeID.String(),
