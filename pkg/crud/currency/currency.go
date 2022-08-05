@@ -34,6 +34,9 @@ func New(ctx context.Context, tx *ent.Tx) (*Currency, error) {
 }
 
 func (s *Currency) rowToObject(row *ent.Currency) *npool.Currency {
+	if row == nil {
+		return nil
+	}
 	return &npool.Currency{
 		ID:             row.ID.String(),
 		AppID:          row.AppID.String(),
@@ -93,6 +96,9 @@ func (s *Currency) Row(ctx context.Context, id uuid.UUID) (*npool.Currency, erro
 
 	err = db.WithTx(ctx, s.Tx, func(_ctx context.Context) error {
 		info, err = s.Tx.Currency.Query().Where(currency.ID(id)).Only(_ctx)
+		if ent.IsNotFound(err) {
+			return nil
+		}
 		return err
 	})
 	if err != nil {
@@ -183,6 +189,9 @@ func (s *Currency) RowOnly(ctx context.Context, conds cruder.Conds) (*npool.Curr
 
 		info, err = stm.Only(_ctx)
 		if err != nil {
+			if ent.IsNotFound(err) {
+				return nil
+			}
 			return fmt.Errorf("fail query currency: %v", err)
 		}
 

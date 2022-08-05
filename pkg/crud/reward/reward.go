@@ -108,6 +108,9 @@ func (s *Reward) Row(ctx context.Context, id uuid.UUID) (*npool.Reward, error) {
 
 	err = db.WithTx(ctx, s.Tx, func(_ctx context.Context) error {
 		info, err = s.Tx.Reward.Query().Where(reward.ID(id)).Only(_ctx)
+		if ent.IsNotFound(err) {
+			return nil
+		}
 		return err
 	})
 	if err != nil {
@@ -202,6 +205,9 @@ func (s *Reward) RowOnly(ctx context.Context, conds cruder.Conds) (*npool.Reward
 
 		info, err = stm.Only(_ctx)
 		if err != nil {
+			if ent.IsNotFound(err) {
+				return nil
+			}
 			return fmt.Errorf("fail query reward: %v", err)
 		}
 
