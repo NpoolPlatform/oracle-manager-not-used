@@ -143,6 +143,6 @@ func TestCRUD(t *testing.T) {
 	assert.Nil(t, err)
 
 	info, err = schema.Row(context.Background(), uuid.MustParse(info.ID))
-	assert.Nil(t, err)
+	assert.NotNil(t, err)
 	assert.Nil(t, info)
 }
